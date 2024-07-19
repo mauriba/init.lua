@@ -1,6 +1,6 @@
 # init.lua
 
-Confuguration lua scripts for my neovim setup.
+Confuguration scripts for my neovim setup.
 
 ## Can you use the config?
 
@@ -14,7 +14,7 @@ He constantly tells his viewers to try out new stuff and "go learn something".
 So I ended up trying neovim: a simple, efficient, moddable text
 editor that the twitch streamer is using. Shoutout to @ThePrimeagen!
 
-Here are the reasons why I get into neovim:
+Here are the reasons why I start using neovim:
 - by configuring neovim, I learn about the underlying tools and pieces used by
 modern IDEs and VSCode
 - neovim features a huge set of keybinds and uses a "keyboard first" approach
