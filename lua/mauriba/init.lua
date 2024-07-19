@@ -1,1 +1,0 @@
-require("mauriba.config.lazy")
