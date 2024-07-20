@@ -1,4 +1,4 @@
-vim.g.mapleader = " "
+require("config.colors")
 
 vim.opt.guicursor = ""
 

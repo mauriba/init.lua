@@ -1,4 +1,4 @@
 return {
-    { import = "plugins.colors" },
+    { import = "plugins.themes" },
     { import = "plugins.basic" }
 }

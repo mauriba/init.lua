@@ -1,5 +1,5 @@
-require("config.set")
-require("config.lazy")
-require("config.remap")
+vim.g.mapleader = " "
 
-vim.cmd.colorscheme "rose-pine-moon"
+require("config.lazy")
+require("config.set")
+require("config.remap")
