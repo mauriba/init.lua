@@ -9,5 +9,4 @@ end
 vim.keymap.set("n", "<leader>tb", MakeTransparent) 
 
 -- default theme
-vim.cmd.colorscheme("rose-pine-moon")
-MakeTransparent()
+vim.cmd.colorscheme("tokyonight-night")

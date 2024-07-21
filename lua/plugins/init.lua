@@ -1,4 +1,4 @@
 return {
     { import = "plugins.themes" },
-    { import = "plugins.basic" }
+    { import = "plugins.editor" }
 }

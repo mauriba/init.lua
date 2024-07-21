@@ -1,0 +1,9 @@
+/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/CMakeFiles/opengl-cube.dir
+/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/CMakeFiles/CopyShaders.dir
+/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/CMakeFiles/edit_cache.dir
+/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/CMakeFiles/rebuild_cache.dir
+/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/lib/CMakeFiles/edit_cache.dir
+/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/lib/CMakeFiles/rebuild_cache.dir
+/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/lib/common/CMakeFiles/common.dir
+/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/lib/common/CMakeFiles/edit_cache.dir
+/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/lib/common/CMakeFiles/rebuild_cache.dir

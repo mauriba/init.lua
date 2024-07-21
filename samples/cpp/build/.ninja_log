@@ -1,0 +1,10 @@
+# ninja log v6
+837	1140	1721574361911914300	opengl-cube.exe	c17fdbf33227bb57
+201	835	1721574361264804200	CMakeFiles/opengl-cube.dir/opengl-cube.cpp.o	840139ac5b22ea4d
+214	690	1721559678068910800	lib/common/libcommon.a	cabf269cc87a1ed6
+137	649	1721580302631646000	build.ninja	ad8f00b05d72fa1c
+8	120	1721574361076614400	/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/CMakeFiles/cmake.verify_globs	88b2f4b29d17bc76
+148	782	1721559509644006600	lib/common/CMakeFiles/common.dir/Shader.cpp.o	1d2bcd77b3923aaa
+11	131	1721580325885863400	/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/CMakeFiles/cmake.verify_globs	88b2f4b29d17bc76
+214	408	1721580326089217600	CMakeFiles/CopyShaders	5649fa6ec94d04dc
+214	408	1721580326089217600	/c/Users/Maurice/AppData/Local/nvim/samples/cpp/build/CMakeFiles/CopyShaders	5649fa6ec94d04dc
