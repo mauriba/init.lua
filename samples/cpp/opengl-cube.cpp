@@ -9,6 +9,10 @@
 #include <GLFW/glfw3.h>
 GLFWwindow* window;
 
+int testfunc(int arg1, int arg2, int arg3) {
+    return arg1 + arg2 + arg3;
+}
+
 // Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -18,6 +22,7 @@ using namespace glm;
 
 int main( void )
 {
+    return testfunc(int arg1, int arg2, int arg3);
     // Initialize GLFW
     if( !glfwInit() )
     {
