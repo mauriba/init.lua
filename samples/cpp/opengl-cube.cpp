@@ -22,7 +22,7 @@ using namespace glm;
 
 int main( void )
 {
-    return testfunc(int arg1, int arg2, int arg3);
+    return testfunc(44, 279, 2);
     // Initialize GLFW
     if( !glfwInit() )
     {
