@@ -16,4 +16,4 @@ add_dependencies(opengl-cube CopyShaders)
 
 # -lm -lglew32 -lfreeglut -lopengl32 -Wl,--subsystem,windows
 target_include_directories(opengl-cube PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-target_link_libraries(opengl-cube PUBLIC common PRIVATE m glew32 opengl32 glfw3)
+target_link_libraries(opengl-cube PUBLIC common PRIVATE m GL GLU GLEW  glfw)

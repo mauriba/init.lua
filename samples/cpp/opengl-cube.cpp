@@ -18,11 +18,10 @@ int testfunc(int arg1, int arg2, int arg3) {
 #include <glm/gtc/matrix_transform.hpp>
 using namespace glm;
 
-#include <common/shader.hpp>
+#include <common/Shader.hpp>
 
 int main( void )
 {
-    return testfunc(44, 279, 2);
     // Initialize GLFW
     if( !glfwInit() )
     {
