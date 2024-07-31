@@ -20,7 +20,7 @@ using namespace glm;
 
 #include <common/Shader.hpp>
 
-int main( void )
+int main(int argc, char *argv[])
 {
     // Initialize GLFW
     if( !glfwInit() )

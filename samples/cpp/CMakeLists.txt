@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(CppBuildExample VERSION 0.0 LANGUAGES CXX)
+# INFO: Export a compile_commands.json file for clangd lsp to recognize project includes
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_subdirectory(lib)
