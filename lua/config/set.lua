@@ -1,5 +1,3 @@
-require("config.colors")
-
 vim.opt.guicursor = ""
 
 vim.opt.nu = true
@@ -33,3 +31,5 @@ vim.opt.updatetime = 50
 -- vim.opt.colorcolumn = "80"
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+
+vim.g.disable_autoformat = true
