@@ -6,7 +6,7 @@ function MakeTransparent()
     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
-vim.keymap.set("n", "<leader>tb", MakeTransparent) 
+vim.keymap.set("n", "<leader>tb", MakeTransparent)
 
 -- default theme
-vim.cmd.colorscheme("tokyonight-night")
+vim.cmd.colorscheme("catppuccin-mocha")
