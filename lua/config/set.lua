@@ -1,5 +1,3 @@
-require("config.colors")
-
 vim.opt.guicursor = ""
 
 vim.opt.nu = true
