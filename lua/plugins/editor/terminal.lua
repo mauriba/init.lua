@@ -3,8 +3,14 @@ return {
         'akinsho/toggleterm.nvim',
         version = "*",
         config = function ()
-            require("toggleterm").setup{}
+            require("toggleterm").setup{
+                hide_numbers = false,
+                direction = "horizontal",
+            }
             vim.keymap.set("n", "ö", function ()
+                -- TODO: Find out how to conveniently add support
+                -- for multiple terminals, e.g. using multiple tabs
+                -- in one window
                 vim.cmd("ToggleTerm")
             end) 
 
@@ -23,4 +29,24 @@ return {
             vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
         end
     },
+    {
+        "da-moon/telescope-toggleterm.nvim",
+        dependencies = {
+            "akinsho/nvim-toggleterm.lua",
+            "nvim-telescope/telescope.nvim",
+            "nvim-lua/popup.nvim",
+            "nvim-lua/plenary.nvim",
+        },
+        config = function ()
+            require("telescope-toggleterm").setup {
+                telescope_mappings = {
+                    -- <ctrl-c> : kill the terminal buffer (default) .
+                    ["<C-c>"] = require("telescope-toggleterm").actions.exit_terminal,
+                },
+            }
+            vim.keymap.set("n", "<leader>pt", function ()
+                require('telescope-toggleterm').open()
+            end, {desc = "Project terminals"})
+        end,
+    }
 }
