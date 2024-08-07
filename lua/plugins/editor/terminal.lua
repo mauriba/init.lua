@@ -4,7 +4,9 @@ return {
         version = "*",
         config = function ()
             require("toggleterm").setup{}
-            vim.keymap.set("n", "ö", "<cmd>ToggleTerm<cr><esc>") 
+            vim.keymap.set("n", "ö", function ()
+                vim.cmd("ToggleTerm")
+            end) 
 
             function _G.set_terminal_keymaps()
                 local opts = {buffer = 0}
