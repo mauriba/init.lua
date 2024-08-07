@@ -1,6 +1,5 @@
 -- default callback on lsp attach
-function on_lspattach(client, bufnr)
-    return
+local on_lspattach = function(client, bufnr)
 end
 
 return {
@@ -49,11 +48,23 @@ return {
                         capabilities = capabilities,
                     }
                 end,
+                lua_ls = function()
+                    require("lspconfig").lua_ls.setup {
+                        on_init = function(client)
+                            local path = client.workspace_folders[1].name
+                            if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
+                                return
+                            end
+                        end,
+                        settings = {
+                            Lua = {}
+                        }
+                    }
+                end,
             },
         })
 
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
-        local luasnip = require("luasnip")
 
         cmp.setup({
             snippet = {
@@ -71,8 +82,8 @@ return {
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
             }, {
-                { name = 'buffer' },
-            })
+                    { name = 'buffer' },
+                })
         })
 
         vim.diagnostic.config({
