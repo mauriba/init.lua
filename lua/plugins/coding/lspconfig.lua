@@ -1,5 +1,13 @@
 -- default callback on lsp attach
 local on_lspattach = function(client, bufnr)
+    local builtin = require("telescope.builtin")
+    vim.keymap.set("n", "gd", function()
+        builtin.lsp_definitions({
+            initial_mode = "normal",
+        })
+    end, {silent = true, remap = true})
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
+    vim.keymap.set("n", "gr", builtin.lsp_references)
 end
 
 return {
@@ -15,6 +23,7 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
+        "nvim-telescope/telescope.nvim",
     },
 
     config = function()

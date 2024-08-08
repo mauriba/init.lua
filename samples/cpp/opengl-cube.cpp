@@ -15,8 +15,7 @@ GLFWwindow *window;
 using namespace glm;
 
 #include <common/Shader.hpp>
-
-int main(int argc, char *argv[]) {
+int main (int argc, char *argv[]) {
   // Initialize GLFW
   if (!glfwInit()) {
     fprintf(stderr, "Failed to initialize GLFW\n");

@@ -16,6 +16,11 @@ return {
                 -- "size",
                 -- "mtime",
             },
+            keymaps = {
+                ["<C-s>"] = false,
+                ["<C-h>"] = false,
+                ["<C-t>"] = false,
+            },
         }
         -- Override Ex (explorer) so that Oil gets started instead of netrw
         vim.cmd["Ex"] = vim.cmd["Oil"]
