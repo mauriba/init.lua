@@ -8,6 +8,8 @@ local on_lspattach = function(client, bufnr)
     end, {silent = true, remap = true})
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
     vim.keymap.set("n", "gr", builtin.lsp_references)
+
+    vim.keymap.set("n", "gR", vim.lsp.buf.rename)
 end
 
 return {
