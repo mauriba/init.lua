@@ -3,10 +3,12 @@ cmake_minimum_required(VERSION 3.16)
 project(CppBuildExample VERSION 0.0 LANGUAGES CXX)
 # INFO: Export a compile_commands.json file for clangd lsp to recognize project includes
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_BUILD_TYPE Debug)
 
 add_subdirectory(lib)
 
 add_executable(opengl-cube "opengl-cube.cpp")
+add_compile_options(-g)
 
 # Copy shaders
 add_custom_target(CopyShaders ALL
