@@ -8,7 +8,6 @@ local on_lspattach = function(client, bufnr)
     end, {silent = true, remap = true})
     vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
     vim.keymap.set("n", "gr", builtin.lsp_references)
-
     vim.keymap.set("n", "gR", vim.lsp.buf.rename)
 end
 
@@ -36,6 +35,11 @@ return {
             {},
             vim.lsp.protocol.make_client_capabilities(),
             cmp_lsp.default_capabilities())
+        -- Add code folding capabilities for ufo plugin
+        capabilities.textDocument.foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true
+        }
 
         require("fidget").setup({})
         require("mason").setup()
@@ -69,7 +73,8 @@ return {
                         end,
                         settings = {
                             Lua = {}
-                        }
+                        },
+                        capabilities = capabilities
                     }
                 end,
             },
