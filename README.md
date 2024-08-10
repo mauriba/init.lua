@@ -4,7 +4,7 @@ Confuguration scripts for my neovim setup.
 
 ## Can you use the config?
 
-Absolutely! Note however, that I am just getting started using neovim.
+Absolutely! Note however, that I am just getting started with neovim.
 The configurations might be inefficient or overly tailored to me.
 
 ## Motivation
@@ -12,7 +12,7 @@ The configurations might be inefficient or overly tailored to me.
 I stumbled upon this highly efficient, experienced programmer on twitch.
 He constantly tells his viewers to try out new stuff and "go learn something".
 So I ended up trying neovim: a simple, efficient, moddable text
-editor that the twitch streamer is using. Shoutout to @ThePrimeagen!
+editor that our twitch streamer is using. Shoutout to @ThePrimeagen!
 
 Here are the reasons why I start using neovim:
 - by configuring neovim, I learn about the underlying tools and pieces used by
