@@ -2,12 +2,6 @@ return {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
-        -- TODO: better icons
-        -- FIX: better icons
-        -- WARN: better icons
-        -- PERF: better icons
-        -- NOTE: the icons work quite well with their different colors
-        -- TEST: test different icons, e.g. the clock icon doesn't work well with the others
         keywords = {
             FIX = {
                 icon = " ", -- icon used for the sign, and in search results
@@ -23,4 +17,8 @@ return {
             TEST = { icon = "󰙨 ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
         },
     }
+    -- Useful commands with todo-comments:
+    -- :TodoTelescope -> search through all markers project-wide
+    -- :TodoQuickFix -> watch all markers project-wide in quickfix
+    -- :Trouble todo -> show project-wide todos and notes and fixmes in trouble
 }

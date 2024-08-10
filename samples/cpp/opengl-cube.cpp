@@ -15,8 +15,7 @@ GLFWwindow *window;
 using namespace glm;
 
 #include <common/Shader.hpp>
-
-int main(int argc, char *argv[]) {
+int main (int argc, char *argv[]) {
   // Initialize GLFW
   if (!glfwInit()) {
     fprintf(stderr, "Failed to initialize GLFW\n");
@@ -69,8 +68,9 @@ int main(int argc, char *argv[]) {
   glBindVertexArray(VertexArrayID);
 
   // Create and compile our GLSL program from the shaders
-  GLuint programID = LoadShaders("shaders/TransformVertexShader.vertexshader",
-                                 "shaders/ColorFragmentShader.fragmentshader");
+  GLuint programID =
+      LoadShaders("shaders/TransformVertexShader.vertexshader",
+                        "shaders/ColorFragmentShader.fragmentshader");
 
   // Get a handle for our "MVP" uniform
   GLuint MatrixID = glGetUniformLocation(programID, "MVP");
