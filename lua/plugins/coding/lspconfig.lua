@@ -45,7 +45,7 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "lua_ls", "clangd", "cmake"
+                "lua_ls", "clangd", "neocmake",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -54,14 +54,33 @@ return {
                         on_attach = on_lspattach
                     }
                 end,
-                cmake = function ()
-                    require("lspconfig").cmake.setup({
-                        filetypes = {
-                            "cmake", "CMakeLists.txt",
-                        },
-                        on_attach = on_lspattach,
-                        capabilities = capabilities,
-                    })
+                neocmake = function ()
+                    local configs = require("lspconfig.configs")
+                    local nvim_lsp = require("lspconfig")
+                    if not configs.neocmake then
+                        configs.neocmake = {
+                            default_config = {
+                                cmd = { "neocmakelsp", "--stdio" },
+                                filetypes = { "cmake" },
+                                root_dir = function(fname)
+                                    return nvim_lsp.util.find_git_ancestor(fname)
+                                end,
+                                single_file_support = true,-- suggested
+                                on_attach = on_lspattach, -- on_attach is the on_attach function you defined
+                                capabilities = capabilities,
+                                init_options = {
+                                    format = {
+                                        enable = true
+                                    },
+                                    lint = {
+                                        enable = true
+                                    },
+                                    scan_cmake_in_package = true -- default is true
+                                }
+                            }
+                        }
+                        nvim_lsp.neocmake.setup({})
+                    end
                 end,
                 clangd = function()
                     require("lspconfig")["clangd"].setup {
