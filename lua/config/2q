@@ -19,7 +19,7 @@ end, {desc = "New terminal in current directory"})
 vim.keymap.set("n", "<leader>cd", function ()
     p = vim.fn.expand('%:p') 
     if p:starts_with("oil:///") then
-        p = require("oil").get_current_dir() 
+        p = p:sub(#"oil:///" + 1)
     elseif not p:ends_with("/") then
         p = p:match("(.*[/\\])")
     end
