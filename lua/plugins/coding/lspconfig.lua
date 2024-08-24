@@ -45,7 +45,7 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "lua_ls", "clangd",
+                "lua_ls", "clangd", "cmake"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -53,6 +53,15 @@ return {
                         capabilities = capabilities,
                         on_attach = on_lspattach
                     }
+                end,
+                cmake = function ()
+                    require("lspconfig").cmake.setup({
+                        filetypes = {
+                            "cmake", "CMakeLists.txt",
+                        },
+                        on_attach = on_lspattach,
+                        capabilities = capabilities,
+                    })
                 end,
                 clangd = function()
                     require("lspconfig")["clangd"].setup {
