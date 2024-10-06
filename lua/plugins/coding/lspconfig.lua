@@ -45,7 +45,7 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "lua_ls", "clangd", "neocmake",
+                "lua_ls", "clangd", "neocmake", "powershell_es",
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -105,6 +105,24 @@ return {
                         capabilities = capabilities
                     }
                 end,
+                powershell_es = function ()
+                    require("lspconfig").powershell_es.setup {
+                        -- NOTE: Install PowerShell 7 and change to pwsh asap (it is cross-platform)
+                        shell = 'powershell.exe',
+                        on_attach = function (client, bufnr)
+                            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+                            on_lspattach(client, bufnr)
+                        end,
+                        settings = {
+                            powershell = {
+                                codeFormatting = {
+                                    Preset = "OTBS"
+                                }
+                            }
+                        },
+                        capabilities = capabilities,
+                    }
+                end
             },
         })
 
