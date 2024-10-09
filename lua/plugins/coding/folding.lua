@@ -72,6 +72,7 @@ local function custom_folding(bufnr)
     local region_folds = get_region_folds(bufnr)
     local comment_folds = get_comment_folds(bufnr)
     local treesitter_folds = require('ufo').getFolds(bufnr, "treesitter")
+    if treesitter_folds == nil then treesitter_folds = {} end
     for _, fold in ipairs(region_folds) do
         table.insert(treesitter_folds, fold)
     end
