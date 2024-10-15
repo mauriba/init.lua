@@ -45,13 +45,13 @@ return {
         require("mason").setup()
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "lua_ls", "clangd", "neocmake", "powershell_es",
+                "lua_ls", "clangd", "neocmake", "powershell_es", "terraformls"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
                     require("lspconfig")[server_name].setup {
                         capabilities = capabilities,
-                        on_attach = on_lspattach
+                        on_attach = on_lspattach,
                     }
                 end,
                 neocmake = function ()
@@ -103,6 +103,12 @@ return {
                             Lua = {}
                         },
                         capabilities = capabilities
+                    }
+                end,
+                terraformls = function ()
+                    require("lspconfig").terraformls.setup {
+                        capabilities = capabilities,
+                        on_attach = on_lspattach,
                     }
                 end,
                 powershell_es = function ()
