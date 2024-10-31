@@ -22,7 +22,7 @@ int main (int argc, char *argv[]) {
     getchar();
     return -1;
   }
-
+  /* region test */
   glfwWindowHint(GLFW_SAMPLES, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -41,8 +41,8 @@ int main (int argc, char *argv[]) {
     glfwTerminate();
     return -1;
   }
+  // endregion
   glfwMakeContextCurrent(window);
-
   // Initialize GLEW
   glewExperimental = true;  // Needed for core profile
   if (glewInit() != GLEW_OK) {

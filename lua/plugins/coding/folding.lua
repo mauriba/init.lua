@@ -2,84 +2,107 @@
 
 -- Keybinds:
 -- zo: open fold under cursor
+-- zO: open all folds under cursor recursively
 -- zc: close fold under cursor
 -- za: toggle fold under cursor
 -- zR: open all folds
 -- zM: close all folds
 
+-- region test
+
+
+-- endregion
+
 -- Custom folds added to default treesitter ones
-local function get_region_folds(bufnr)
-    local region_folds = {}
+local function get_custom_folds(bufnr)
+    local comment_folds = require('ufo').getFolds(bufnr, "treesitter") or {}
     local line_count = vim.api.nvim_buf_line_count(bufnr)
-    local is_in_region = false
-    local region_start = 0
 
-    local function isRegionStart(line)
-        return line:match('^%s*' .. vim.o.commentstring:sub(1, 1) .. '+%s*region') or line:match('%s*#pragma%s*region') 
-    end
-    local function isRegionEnd(line)
-        return line:match('^%s*' .. vim.o.commentstring:sub(1, 1) .. '+%s*endregion') or line:match('%s*#pragma%s*endregion') 
-    end
+    -- Define custom comment styles for specific languages
+    local comment_styles = {
+        lua = { line = "--", block = { open = "--[[", close = "]]" } },
+        python = { line = "#" },
+        powershell = { line = "#", block = { open = "<#", close = "#>" } },
+        css = { block = { open = "/*", close = "*/" } },
+        html = { block = { open = "<!--", close = "-->" } },
+        cpp = { line = "//", block = { open = "/*", close = "*/" } }
+        -- Add more languages as needed
+    }
 
-    for i = 0, line_count - 1 do
-        local line = vim.api.nvim_buf_get_lines(bufnr, i, i + 1, false)[1]
-        if not is_in_region and isRegionStart(line) then
-            is_in_region = true
-            region_start = i
-        elseif is_in_region and isRegionEnd(line) then
-            is_in_region = false
-            table.insert(region_folds, {startLine = region_start, endLine = i})
-        end
-    end
+    -- Detect current filetype and retrieve comment styles
+    local comments = comment_styles[vim.bo.filetype] or { line = vim.bo.commentstring:match("^(.-)%s*%%s") }
 
-    if is_in_region then
-        table.insert(region_folds, {startLine = region_start, endLine = line_count - 1})
-    end
-
-    return region_folds
-end
-
-local function get_comment_folds(bufnr)
-    local comment_folds = {}
-    local line_count = vim.api.nvim_buf_line_count(bufnr)
-    local is_in_comment = false
-    local comment_start = 0
-
+    -- region custom_fold_block_detectors
     local function isCommentLine(line)
-        return line:match('^%s*' .. vim.o.commentstring:sub(1, 1))
+        return comments.line and line:match("^%s*" .. vim.pesc(comments.line))
+    end
+    local function isBlockStart(line)
+        return comments.block and line:find("%s*" .. vim.pesc(comments.block.open))
+    end
+    local function isBlockEnd(line)
+        return comments.block and line:find("%s*" .. vim.pesc(comments.block.close))
+    end
+    local function isSectionStart(line)
+        return (comments.block and line:find("%s*" .. vim.pesc(comments.block.open) .. "%s*region"))
+            or (comments.line and line:find("%s*" .. vim.pesc(comments.line) .. "%s*region"))
+            or line:find("#pragma%s*region")
+    end
+    local function isSectionEnd(line)
+        return (comments.block and line:find("%s*" .. vim.pesc(comments.block.open) .. "%s*endregion"))
+            or (comments.line and line:find("%s*" .. vim.pesc(comments.line) .. "%s*endregion"))
+            or line:find("#pragma%s*endregion")
+    end
+    -- endregion
+
+    local function getLine(lineno)
+        return vim.api.nvim_buf_get_lines(bufnr, lineno, lineno + 1, false)[1] or ""
+    end
+    local function addFold(startLine, endLine)
+        table.insert(comment_folds, {startLine = startLine, endLine = endLine})
+    end
+    local function isInBuffer(lineno)
+        return lineno < line_count
     end
 
-    for i = 0, line_count - 1 do
-        local line = vim.api.nvim_buf_get_lines(bufnr, i, i + 1, false)[1]
-        if not is_in_comment and isCommentLine(line) then
-            is_in_comment = true
-            comment_start = i
-        elseif is_in_comment and not isCommentLine(line) then
-            is_in_comment = false
-            table.insert(comment_folds, {startLine = comment_start, endLine = i - 1})
+    local iLine = 0
+    while isInBuffer(iLine) do
+        if isSectionStart(getLine(iLine)) then
+            local comment_start = iLine
+            repeat
+                iLine = iLine + 1
+            until isSectionEnd(getLine(iLine)) or not isInBuffer(iLine)
+            if isInBuffer(iLine) then
+                addFold(comment_start, iLine)
+            else
+                iLine = comment_start
+            end
         end
-    end
-
-    if is_in_comment then
-        table.insert(comment_folds, {startLine = comment_start, endLine = line_count - 1})
+        if isCommentLine(getLine(iLine)) then
+            local comment_start = iLine
+            repeat
+                iLine = iLine + 1
+            until not isCommentLine(getLine(iLine)) or not isInBuffer(iLine)
+            if isInBuffer(iLine) and iLine - comment_start > 1 then
+                addFold(comment_start, iLine - 1)
+            else
+                iLine = comment_start
+            end
+        end
+        if isBlockStart(getLine(iLine)) then
+            local comment_start = iLine
+            repeat
+                iLine = iLine + 1
+            until isBlockEnd(getLine(iLine)) or not isInBuffer(iLine)
+            if isInBuffer(iLine) then
+                addFold(comment_start, iLine)
+            else
+                iLine = comment_start
+            end
+        end
+        iLine = iLine + 1
     end
 
     return comment_folds
-end
-
-
-local function custom_folding(bufnr)
-    local region_folds = get_region_folds(bufnr)
-    local comment_folds = get_comment_folds(bufnr)
-    local treesitter_folds = require('ufo').getFolds(bufnr, "treesitter")
-    if treesitter_folds == nil then treesitter_folds = {} end
-    for _, fold in ipairs(region_folds) do
-        table.insert(treesitter_folds, fold)
-    end
-    for _, fold in ipairs(comment_folds) do
-        table.insert(treesitter_folds, fold)
-    end
-    return treesitter_folds
 end
 
 return {
@@ -109,7 +132,7 @@ return {
         event = "BufReadPost",
         opts = {
             provider_selector = function()
-                return custom_folding
+                return get_custom_folds
             end,
         },
 
@@ -122,7 +145,7 @@ return {
             end)
         end,
     },
-    -- Folding preview, by default h and l keys are used.
+    -- Folding preview, by default h and l keys are used
     -- On first press of h key, when cursor is on a closed fold, the preview will be shown.
     -- On second press the preview will be closed and fold will be opened.
     -- When preview is opened, the l key will close it and open fold. In all other cases these keys will work as usual.
