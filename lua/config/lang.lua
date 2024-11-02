@@ -1,11 +1,10 @@
-
 -- config/lang.lua
 --
 -- Language-specific configurations
 
 local generalSettingsGroup = vim.api.nvim_create_augroup('General settings', { clear = true })
 
--- C / C++
+-- region
 vim.api.nvim_create_autocmd('FileType', {
     pattern = { "c", "cpp" },
     callback = function()
@@ -15,8 +14,9 @@ vim.api.nvim_create_autocmd('FileType', {
     end,
     group = generalSettingsGroup,
 })
+-- endregion
 
--- Terraform
+-- region Terraform
 vim.api.nvim_create_autocmd("BufEnter", {
     pattern = { "*.tf", "*.tfvars" },
     callback = function ()
@@ -31,3 +31,4 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.bo.shiftwidth = 2
     end
 })
+-- endregion
