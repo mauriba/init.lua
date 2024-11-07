@@ -27,11 +27,5 @@ vim.keymap.set("n", "<leader>cd", function ()
     print("New CWD: " .. p)
 end)
 
--- Remaps for moving line around (:m) and properly intend it (=)
-vim.keymap.set("n", "J", ":m +1<CR>==")
-vim.keymap.set("n", "K", ":m -2<CR>==")
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '>-2<CR>gv=gv")
-
 -- Let Q also quit neovim
 vim.api.nvim_create_user_command("Q", ":q", {})
