@@ -8,11 +8,6 @@
 -- zR: open all folds
 -- zM: close all folds
 
---[[
-fdsfdsfsd
-fdsfdfsdf
---]]
-
 -- Helper function for custom fold generators
 local function getLine(bufnr, lineno)
     return vim.api.nvim_buf_get_lines(bufnr, lineno, lineno + 1, false)[1] or ""
