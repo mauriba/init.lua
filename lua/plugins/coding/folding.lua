@@ -65,15 +65,53 @@ local function get_comment_folds(bufnr)
     return comment_folds
 end
 
+-- Fold generator for regions
+local function get_region_folds(bufnr)
+    local region_folds = {}
+    local line_count = vim.api.nvim_buf_line_count(bufnr)
+
+    local comments = require("config.coding.folding").getCommentStyle()
+    comments.line = comments.line or vim.bo.commentstring:match("^(.-)%s*%%s")
+
+    local function isRegionStart(line)
+        return (comments.block and line:find("%s*" .. vim.pesc(comments.block.open) .. "%s*region"))
+            or (comments.line and line:find("%s*" .. vim.pesc(comments.line) .. "%s*region"))
+            or line:find("#pragma%s*region")
+    end
+    local function isRegionEnd(line)
+        return (comments.block and line:find("%s*" .. vim.pesc(comments.block.open) .. "%s*endregion"))
+            or (comments.line and line:find("%s*" .. vim.pesc(comments.line) .. "%s*endregion"))
+            or line:find("#pragma%s*endregion")
+    end
+
+    local iLine = 0
+    while iLine < line_count do
+        if isRegionStart(getLine(bufnr, iLine)) then
+            local region_start = iLine
+            repeat
+               iLine = iLine + 1
+            until isRegionEnd(getLine(bufnr, iLine)) or not (iLine < line_count)
+            if iLine < line_count then
+                table.insert(region_folds, { startLine = region_start, endLine = iLine })
+            else
+                iLine = comment_start
+            end
+        end
+        iLine = iLine + 1
+    end
+
+    return region_folds
+end
+
 -- Merges custom folds for comment blocks and regions
 -- with treesitter folds. This function is passed to UFO for execution.
 local function get_custom_folds(bufnr)
     local folds = require('ufo').getFolds(bufnr, "treesitter") or {}
-    -- local region_folds = get_region_folds(bufnr)
+    local region_folds = get_region_folds(bufnr)
     local comment_folds = get_comment_folds(bufnr)
-    -- for _, fold in ipairs(region_folds) do
-    --     table.insert(folds, fold)
-    -- end
+    for _, fold in ipairs(region_folds) do
+        table.insert(folds, fold)
+    end
     for _, fold in ipairs(comment_folds) do
         table.insert(folds, fold)
     end
