@@ -66,6 +66,7 @@ local function get_comment_folds(bufnr)
 end
 
 -- Fold generator for regions
+-- BUG: Region fold extends if it contains a sub fold that is closed outside of the region
 local function get_region_folds(bufnr)
     local region_folds = {}
     local line_count = vim.api.nvim_buf_line_count(bufnr)
@@ -94,7 +95,7 @@ local function get_region_folds(bufnr)
             if iLine < line_count then
                 table.insert(region_folds, { startLine = region_start, endLine = iLine })
             else
-                iLine = comment_start
+                iLine = region_start
             end
         end
         iLine = iLine + 1
