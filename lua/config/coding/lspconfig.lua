@@ -16,7 +16,7 @@ function M.start(lsp, config)
         vim.lsp.protocol.make_client_capabilities(),
         require("cmp_nvim_lsp").default_capabilities()
     )
-    capabilities.textDocument.foldingRange = {     -- Code folding for UFO lsp support
+    capabilities.textDocument.foldingRange = { -- Code folding for UFO lsp support
         dynamicRegistration = false,
         lineFoldingOnly = true
     }
@@ -28,11 +28,15 @@ function M.start(lsp, config)
             config,
             {
                 capabilities = capabilities,
-                autostart = true,     -- Now that the lsp is set up, it may start and attach automatically
+                autostart = true, -- Now that the lsp is set up, it may start and attach automatically
             }
         )
         require("lspconfig")[lsp].setup(config)
-        lsp_configs[lsp].launch()
+
+        -- After setup, there should be a lsp config. If not, the lsp server is not known by lspconfig.
+        if lsp_configs[lsp] then
+            lsp_configs[lsp].launch()
+        end
     end
 end
 
