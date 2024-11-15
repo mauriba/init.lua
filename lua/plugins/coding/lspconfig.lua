@@ -13,6 +13,7 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
+        { "onsails/lspkind.nvim", config = function() require("lspkind").setup() end },
     },
 
     config = function()
@@ -39,7 +40,12 @@ return {
                 { name = 'luasnip' }, -- For luasnip users.
             }, {
                 { name = 'buffer' },
-            })
+            }),
+            formatting = {
+                format = require("lspkind").cmp_format({
+                    mode = "symbol_text",
+                })
+            },
         })
 
         vim.diagnostic.config({
@@ -62,13 +68,14 @@ return {
             callback = function(e)
                 local opts = { buffer = e.buf }
                 vim.keymap.set("n", "gd", function() ts.lsp_definitions() end, opts)
-                vim.keymap.set("n", "gr", function() ts.lsp_references({include_declaration = false}) end, opts)
+                vim.keymap.set("n", "gr", function() ts.lsp_references({ include_declaration = false }) end, opts)
                 vim.keymap.set("n", "gi", function() ts.lsp_implementations() end, opts)
                 vim.keymap.set("n", "gR", function() vim.lsp.buf.rename() end, opts)
                 vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
                 vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
                 vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
-                vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)     end
+                vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+            end
         })
     end,
 }
