@@ -2,9 +2,13 @@
 return {
     'jmbuhr/otter.nvim',
     keys = {
-        { '<leader>ot', function ()
-            require("otter").activate()
-        end, desc = 'Otter (LSP for embedded blocks)' },
+        {
+            '<leader>ot',
+            function()
+                require("otter").activate()
+            end,
+            desc = 'Otter (LSP for embedded blocks)'
+        },
     },
     dependencies = {
         'nvim-treesitter/nvim-treesitter',

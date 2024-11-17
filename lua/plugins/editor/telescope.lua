@@ -11,9 +11,11 @@ return {
             },
         },
         keys = {
-            { "<leader>pb",  "<cmd>Telescope buffers<cr>",      desc = "Telescope: Project Buffers" },
-            { "<leader>pf",  "<cmd>Telescope find_files<cr>",   desc = "Telescope: Project Files" },
-            { "<leader>pgb", "<cmd>Telescope git_branches<cr>", desc = "Telescope: Project Git Branches" },
+            { "<leader>pb",  "<cmd>Telescope buffers<cr>",               desc = "Telescope: Project Buffers" },
+            { "<leader>pf",  "<cmd>Telescope find_files<cr>",            desc = "Telescope: Project Files" },
+            { "<leader>pl",  "<cmd>Telescope lsp_document_symbols<cr>",  desc = "Telescope: LSP Document symbols" },
+            { "<leader>pL",  "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Telescope: LSP Workspace symbols" },
+            { "<leader>pgb", "<cmd>Telescope git_branches<cr>",          desc = "Telescope: Project Git Branches" },
             {
                 "<leader>pgc",
                 function()
