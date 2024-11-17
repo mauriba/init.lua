@@ -20,6 +20,7 @@ function M.start(lsp, config)
         dynamicRegistration = false,
         lineFoldingOnly = true
     }
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
 
     local lsp_configs = require("lspconfig.configs")
     if not lsp_configs[lsp] then
