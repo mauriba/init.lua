@@ -37,3 +37,8 @@ vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decr
 vim.o.foldenable = true
 vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 vim.opt.signcolumn = "yes"
+
+-- Disable the freaking annoying Unneccessary->Comment link
+-- that causes unused functions to be rendered like comments
+vim.api.nvim_set_hl(0, "LspUnused", { link = nil })
+vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = nil })
