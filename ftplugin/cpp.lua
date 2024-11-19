@@ -3,6 +3,7 @@ require("config.coding.folding").addCommentStyle("cpp", {
     line = "//"
 })
 require("config.coding.lspconfig").start("clangd", {
+     -- disable for no argument autocomplete: function-arg-placeholders
 })
 
 local dap = require("dap")

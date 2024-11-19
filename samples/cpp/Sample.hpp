@@ -7,13 +7,13 @@ namespace cpp {
 
 class Sample {
 public:
-    Sample() {
+    Sample(std::string test) {
         std::cout << "Sample instance constructed\n"; 
+        std::cout << test << std::endl;
     }
     ~Sample() {
         std::cout << "Sample instance destructed\n";
     }
-    
 };
 
 }
