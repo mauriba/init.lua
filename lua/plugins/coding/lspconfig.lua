@@ -14,6 +14,7 @@ return {
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
         { "onsails/lspkind.nvim", config = function() require("lspkind").setup() end },
+        "zbirenbaum/copilot-cmp",
     },
 
     config = function()
@@ -21,6 +22,7 @@ return {
 
         require("fidget").setup({})
         require("mason").setup({})
+        require("copilot_cmp").setup({})
 
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
         cmp.setup({
@@ -40,16 +42,21 @@ return {
             sources = cmp.config.sources({
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
+                { name = 'path' },
+                { name = 'copilot' },
             }, {
                 { name = 'buffer' },
             }),
             formatting = {
                 format = require("lspkind").cmp_format({
                     mode = "symbol_text",
+                    max_width = 50,
+                    symbol_map = { Copilot = "" }
                 })
             },
         })
 
+        vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
         vim.diagnostic.config({
             -- update_in_insert = true,
             float = {
