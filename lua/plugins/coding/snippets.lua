@@ -10,7 +10,12 @@ return {
 
         config = function()
             local ls = require("luasnip")
+            
             require("luasnip.loaders.from_vscode").lazy_load()
+            require("luasnip.loaders.from_lua").load({
+                paths = vim.fn.stdpath("config") .. "/snippets",
+            })
+
             ls.filetype_extend("javascript", { "jsdoc" })
             vim.keymap.set({"i"}, "<C-e>", function() ls.expand() end, {silent = true})
 

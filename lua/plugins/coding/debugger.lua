@@ -1,65 +1,33 @@
 return {
-    {
-        "jay-babu/mason-nvim-dap.nvim",
-        event = "VeryLazy",
-        dependencies = {
-           "williamboman/mason.nvim",
-            "mfussenegger/nvim-dap",
-        },
-        opts = {
-            handlers = {},
-        },
-    },
-    {
+    "mfussenegger/nvim-dap",
+    dependencies = {
         "rcarriga/nvim-dap-ui",
-        desc = "Debugging support. Requires language specific adapters to be configured. (see lang extras)",
-        event = "VeryLazy",
-        dependencies = {
-            "mfussenegger/nvim-dap",
-            "nvim-neotest/nvim-nio",
-            -- virtual text for the debugger
-            {
-                "theHamsta/nvim-dap-virtual-text",
-                opts = {},
-            },
-        },
-
-        config = function()
-            local dap = require("dap")
-            local dapui = require("dapui")
-            dapui.setup()
-            dap.listeners.after.event_initialized["dapui_config"] = function ()
-                dapui.open()
-            end
-            dap.listeners.before.event_initialized["dapui_config"] = function ()
-                dapui.close()
-            end
-            dap.listeners.before.event_exited["dapui_config"] = function ()
-                dapui.close()
-            end
-        end,
+        "theHamsta/nvim-dap-virtual-text",
+        "nvim-neotest/nvim-nio",
+        "williamboman/mason.nvim",
     },
-    {
-        "mfussenegger/nvim-dap",
-        keys = {
-            { "<leader>d", "", desc = "+debug", mode = {"n", "v"} },
-            { "<leader>dB", function() require("dap").set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, desc = "Breakpoint Condition" },
-            { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
-            { "<leader>dc", function() require("dap").continue() end, desc = "Continue" },
-            { "<leader>da", function() require("dap").continue({ before = get_args }) end, desc = "Run with Args" },
-            { "<leader>dC", function() require("dap").run_to_cursor() end, desc = "Run to Cursor" },
-            { "<leader>dg", function() require("dap").goto_() end, desc = "Go to Line (No Execute)" },
-            { "<leader>di", function() require("dap").step_into() end, desc = "Step Into" },
-            { "<leader>dj", function() require("dap").down() end, desc = "Down" },
-            { "<leader>dk", function() require("dap").up() end, desc = "Up" },
-            { "<leader>dl", function() require("dap").run_last() end, desc = "Run Last" },
-            { "<leader>do", function() require("dap").step_out() end, desc = "Step Out" },
-            { "<leader>dO", function() require("dap").step_over() end, desc = "Step Over" },
-            { "<leader>dp", function() require("dap").pause() end, desc = "Pause" },
-            { "<leader>dr", function() require("dap").repl.toggle() end, desc = "Toggle REPL" },
-            { "<leader>ds", function() require("dap").session() end, desc = "Session" },
-            { "<leader>dt", function() require("dap").terminate() end, desc = "Terminate" },
-            { "<leader>dw", function() require("dap.ui.widgets").hover() end, desc = "Widgets" },
-        }
-    }
+    config = function()
+        local dap = require("dap")
+        local dapui = require("dapui")
+        require("nvim-dap-virtual-text").setup({})
+        dapui.setup({})
+
+        dap.listeners.before.attach.dapui_config = function()
+            dapui.open()
+        end
+        dap.listeners.before.launch.dapui_config = function()
+            dapui.open()
+        end
+        dap.listeners.before.event_terminated.dapui_config = function()
+            dapui.close()
+        end
+        dap.listeners.before.event_exited.dapui_config = function()
+            dapui.close()
+        end
+
+        vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint)
+        vim.keymap.set("n", "<leader>dr", dap.continue)
+        vim.keymap.set("n", "<leader>dc", dap.run_to_cursor)
+        vim.keymap.set("n", "<leader>dk", dap.step_back)
+    end
 }

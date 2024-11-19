@@ -8,31 +8,20 @@
 -- zR: open all folds
 -- zM: close all folds
 
--- region test
+-- Helper function for custom fold generators
+local function getLine(bufnr, lineno)
+    return vim.api.nvim_buf_get_lines(bufnr, lineno, lineno + 1, false)[1] or ""
+end
 
-
--- endregion
-
--- Custom folds added to default treesitter ones
-local function get_custom_folds(bufnr)
-    local comment_folds = require('ufo').getFolds(bufnr, "treesitter") or {}
+-- Fold generator for blocks of comments
+local function get_comment_folds(bufnr)
+    local comment_folds = {}
     local line_count = vim.api.nvim_buf_line_count(bufnr)
 
-    -- Define custom comment styles for specific languages
-    local comment_styles = {
-        lua = { line = "--", block = { open = "--[[", close = "]]" } },
-        python = { line = "#" },
-        powershell = { line = "#", block = { open = "<#", close = "#>" } },
-        css = { block = { open = "/*", close = "*/" } },
-        html = { block = { open = "<!--", close = "-->" } },
-        cpp = { line = "//", block = { open = "/*", close = "*/" } }
-        -- Add more languages as needed
-    }
+    local comments = require("config.coding.folding").getCommentStyle()
+    comments.line = comments.line or vim.bo.commentstring:match("^(.-)%s*%%s")
 
-    -- Detect current filetype and retrieve comment styles
-    local comments = comment_styles[vim.bo.filetype] or { line = vim.bo.commentstring:match("^(.-)%s*%%s") }
-
-    -- region custom_fold_block_detectors
+    -- region comment detection
     local function isCommentLine(line)
         return comments.line and line:match("^%s*" .. vim.pesc(comments.line))
     end
@@ -42,67 +31,92 @@ local function get_custom_folds(bufnr)
     local function isBlockEnd(line)
         return comments.block and line:find("%s*" .. vim.pesc(comments.block.close))
     end
-    local function isSectionStart(line)
+    -- endregion
+    
+    local iLine = 0
+    while iLine < line_count do
+        if isBlockStart(getLine(bufnr, iLine)) then
+            local comment_start = iLine
+            repeat
+               iLine = iLine + 1
+            until isBlockEnd(getLine(bufnr, iLine)) or not (iLine < line_count)
+            if iLine < line_count then
+                table.insert(comment_folds, { startLine = comment_start, endLine = iLine })
+            else
+                iLine = comment_start
+            end
+        end
+
+        if isCommentLine(getLine(bufnr, iLine)) then
+            local comment_start = iLine
+            repeat
+               iLine = iLine + 1
+            until not isCommentLine(getLine(bufnr, iLine)) or not (iLine < line_count)
+            if iLine < line_count then
+                table.insert(comment_folds, { startLine = comment_start, endLine = iLine - 1 })
+            else
+                iLine = comment_start
+            end
+        end
+
+        iLine = iLine + 1
+    end
+
+    return comment_folds
+end
+
+-- Fold generator for regions
+-- BUG: Region fold extends if it contains a sub fold that is closed outside of the region
+local function get_region_folds(bufnr)
+    local region_folds = {}
+    local line_count = vim.api.nvim_buf_line_count(bufnr)
+
+    local comments = require("config.coding.folding").getCommentStyle()
+    comments.line = comments.line or vim.bo.commentstring:match("^(.-)%s*%%s")
+
+    local function isRegionStart(line)
         return (comments.block and line:find("%s*" .. vim.pesc(comments.block.open) .. "%s*region"))
             or (comments.line and line:find("%s*" .. vim.pesc(comments.line) .. "%s*region"))
             or line:find("#pragma%s*region")
     end
-    local function isSectionEnd(line)
+    local function isRegionEnd(line)
         return (comments.block and line:find("%s*" .. vim.pesc(comments.block.open) .. "%s*endregion"))
             or (comments.line and line:find("%s*" .. vim.pesc(comments.line) .. "%s*endregion"))
             or line:find("#pragma%s*endregion")
     end
-    -- endregion
-
-    local function getLine(lineno)
-        return vim.api.nvim_buf_get_lines(bufnr, lineno, lineno + 1, false)[1] or ""
-    end
-    local function addFold(startLine, endLine)
-        table.insert(comment_folds, {startLine = startLine, endLine = endLine})
-    end
-    local function isInBuffer(lineno)
-        return lineno < line_count
-    end
 
     local iLine = 0
-    while isInBuffer(iLine) do
-        if isSectionStart(getLine(iLine)) then
-            local comment_start = iLine
+    while iLine < line_count do
+        if isRegionStart(getLine(bufnr, iLine)) then
+            local region_start = iLine
             repeat
-                iLine = iLine + 1
-            until isSectionEnd(getLine(iLine)) or not isInBuffer(iLine)
-            if isInBuffer(iLine) then
-                addFold(comment_start, iLine)
+               iLine = iLine + 1
+            until isRegionEnd(getLine(bufnr, iLine)) or not (iLine < line_count)
+            if iLine < line_count then
+                table.insert(region_folds, { startLine = region_start, endLine = iLine })
             else
-                iLine = comment_start
-            end
-        end
-        if isCommentLine(getLine(iLine)) then
-            local comment_start = iLine
-            repeat
-                iLine = iLine + 1
-            until not isCommentLine(getLine(iLine)) or not isInBuffer(iLine)
-            if isInBuffer(iLine) and iLine - comment_start > 1 then
-                addFold(comment_start, iLine - 1)
-            else
-                iLine = comment_start
-            end
-        end
-        if isBlockStart(getLine(iLine)) then
-            local comment_start = iLine
-            repeat
-                iLine = iLine + 1
-            until isBlockEnd(getLine(iLine)) or not isInBuffer(iLine)
-            if isInBuffer(iLine) then
-                addFold(comment_start, iLine)
-            else
-                iLine = comment_start
+                iLine = region_start
             end
         end
         iLine = iLine + 1
     end
 
-    return comment_folds
+    return region_folds
+end
+
+-- Merges custom folds for comment blocks and regions
+-- with treesitter folds. This function is passed to UFO for execution.
+local function get_custom_folds(bufnr)
+    local folds = require('ufo').getFolds(bufnr, "treesitter") or {}
+    local region_folds = get_region_folds(bufnr)
+    local comment_folds = get_comment_folds(bufnr)
+    for _, fold in ipairs(region_folds) do
+        table.insert(folds, fold)
+    end
+    for _, fold in ipairs(comment_folds) do
+        table.insert(folds, fold)
+    end
+    return folds
 end
 
 return {
@@ -111,23 +125,6 @@ return {
         "kevinhwang91/nvim-ufo",
         dependencies = {
             "kevinhwang91/promise-async",
-            {
-                "luukvbaal/statuscol.nvim",
-                config = function()
-                    local builtin = require("statuscol.builtin")
-                    require("statuscol").setup({
-                        relculright = true,
-                        segments = {
-                            {
-                                sign = { name = { ".*" }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
-                                click = "v:lua.ScSa"
-                            },
-                            { text = { builtin.lnumfunc }, click = "v:lua.ScLa", },
-                            { text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
-                        }
-                    })
-                end,
-            },
         },
         event = "BufReadPost",
         opts = {

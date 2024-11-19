@@ -1,21 +1,10 @@
--- default callback on lsp attach
-local on_lspattach = function(client, bufnr)
-    local builtin = require("telescope.builtin")
-    vim.keymap.set("n", "gd", function()
-        builtin.lsp_definitions({
-            initial_mode = "normal",
-        })
-    end, {silent = true, remap = true})
-    vim.keymap.set("n", "gD", vim.lsp.buf.declaration)
-    vim.keymap.set("n", "gr", builtin.lsp_references)
-    vim.keymap.set("n", "gR", vim.lsp.buf.rename)
-end
-
+-- Lsp plugin specification for LazyVim
+-- and useful `start` function for starting
+-- lsp servers from ftplugin
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
         "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
@@ -24,120 +13,22 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
-        "nvim-telescope/telescope.nvim",
+        { "onsails/lspkind.nvim", config = function() require("lspkind").setup() end },
     },
 
     config = function()
         local cmp = require('cmp')
-        local cmp_lsp = require("cmp_nvim_lsp")
-        local capabilities = vim.tbl_deep_extend(
-            "force",
-            {},
-            vim.lsp.protocol.make_client_capabilities(),
-            cmp_lsp.default_capabilities())
-        -- Add code folding capabilities for ufo plugin
-        capabilities.textDocument.foldingRange = {
-            dynamicRegistration = false,
-            lineFoldingOnly = true
-        }
 
         require("fidget").setup({})
-        require("mason").setup()
-        require("mason-lspconfig").setup({
-            ensure_installed = {
-                "lua_ls", "clangd", "neocmake", "powershell_es", "terraformls"
-            },
-            handlers = {
-                function(server_name) -- default handler (optional)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities,
-                        on_attach = on_lspattach,
-                    }
-                end,
-                neocmake = function ()
-                    local configs = require("lspconfig.configs")
-                    local nvim_lsp = require("lspconfig")
-                    if not configs.neocmake then
-                        configs.neocmake = {
-                            default_config = {
-                                cmd = { "neocmakelsp", "--stdio" },
-                                filetypes = { "cmake" },
-                                root_dir = function(fname)
-                                    return nvim_lsp.util.find_git_ancestor(fname)
-                                end,
-                                single_file_support = true,-- suggested
-                                on_attach = on_lspattach, -- on_attach is the on_attach function you defined
-                                capabilities = capabilities,
-                                init_options = {
-                                    format = {
-                                        enable = true
-                                    },
-                                    lint = {
-                                        enable = true
-                                    },
-                                    scan_cmake_in_package = true -- default is true
-                                }
-                            }
-                        }
-                        nvim_lsp.neocmake.setup({})
-                    end
-                end,
-                clangd = function()
-                    require("lspconfig")["clangd"].setup {
-                        on_attach = function(client, bufnr)
-                            client.server_capabilities.signatureHelpProvider = false
-                            on_lspattach(client, bufnr)
-                        end,
-                        capabilities = capabilities,
-                    }
-                end,
-                lua_ls = function()
-                    require("lspconfig").lua_ls.setup {
-                        on_init = function(client)
-                            local path = client.workspace_folders[1].name
-                            if vim.loop.fs_stat(path..'/.luarc.json') or vim.loop.fs_stat(path..'/.luarc.jsonc') then
-                                return
-                            end
-                        end,
-                        settings = {
-                            Lua = {}
-                        },
-                        capabilities = capabilities
-                    }
-                end,
-                terraformls = function ()
-                    require("lspconfig").terraformls.setup {
-                        capabilities = capabilities,
-                        on_attach = on_lspattach,
-                    }
-                end,
-                powershell_es = function ()
-                    require("lspconfig").powershell_es.setup {
-                        -- NOTE: Install PowerShell 7 and change to pwsh asap (it is cross-platform)
-                        shell = 'powershell.exe',
-                        on_attach = function (client, bufnr)
-                            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-                            on_lspattach(client, bufnr)
-                        end,
-                        settings = {
-                            powershell = {
-                                codeFormatting = {
-                                    Preset = "OTBS"
-                                }
-                            }
-                        },
-                        capabilities = capabilities,
-                    }
-                end
-            },
-        })
+        require("mason").setup({})
 
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
-
         cmp.setup({
             snippet = {
                 expand = function(args)
-                    require('luasnip').lsp_expand(args.body)
+                    require('luasnip').lsp_expand(args.body, {
+                        indent = true
+                    })
                 end,
             },
             mapping = cmp.mapping.preset.insert({
@@ -150,8 +41,13 @@ return {
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
             }, {
-                    { name = 'buffer' },
+                { name = 'buffer' },
+            }),
+            formatting = {
+                format = require("lspkind").cmp_format({
+                    mode = "symbol_text",
                 })
+            },
         })
 
         vim.diagnostic.config({
@@ -165,5 +61,23 @@ return {
                 prefix = "",
             },
         })
-    end
+
+        -- Autocmd for useful lsp keybinds
+        local ts = require("telescope.builtin")
+        local lsp_group = vim.api.nvim_create_augroup("lsp", {})
+        vim.api.nvim_create_autocmd("LspAttach", {
+            group = lsp_group,
+            callback = function(e)
+                local opts = { buffer = e.buf }
+                vim.keymap.set("n", "gd", function() ts.lsp_definitions() end, opts)
+                vim.keymap.set("n", "gr", function() ts.lsp_references({ include_declaration = false }) end, opts)
+                vim.keymap.set("n", "gi", function() ts.lsp_implementations() end, opts)
+                vim.keymap.set("n", "gR", function() vim.lsp.buf.rename() end, opts)
+                vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+                vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
+                vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
+                vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+            end
+        })
+    end,
 }
