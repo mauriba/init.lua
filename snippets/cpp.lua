@@ -13,7 +13,7 @@ local function generateHeaderGuard()
     return trimmedPath():gsub("[/\\.\\]", "_"):upper()
 end
 local function generateNamespace()
-    local namespace = trimmedPath():match("(.+)[/\\]")
+    local namespace = trimmedPath():match("([^/\\]+)[/\\]")
     return namespace and namespace:gsub("[/\\]", "::") or ""
 end
 local function generateClassName()
