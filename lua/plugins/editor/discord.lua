@@ -11,7 +11,7 @@ return {
             debounce_timeout    = 10,                         -- Number of seconds to debounce events (or calls to `:lua package.loaded.presence:update(<filename>, true)`)
             enable_line_number  = false,                      -- Displays the current line number instead of the current project
             blacklist           = {},                         -- A list of strings or Lua patterns that disable Rich Presence if the current file name, path, or workspace matches
-            buttons             = { { label = "test", url = "https://google.de" } },
+            buttons             = true,
             file_assets         = {},                         -- Custom file asset definitions keyed by file names and extensions (see default config at `lua/presence/file_assets.lua` for reference)
             show_time           = true,                       -- Show the timer
 
