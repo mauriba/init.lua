@@ -6,3 +6,10 @@ vim.api.nvim_create_autocmd("BufEnter", {
         vim.opt.filetype = "terraform"
     end
 })
+
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = { "*.cisco" },
+    callback = function ()
+        vim.opt.filetype = "cisco"
+    end
+})
