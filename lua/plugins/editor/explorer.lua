@@ -68,15 +68,15 @@ return {
             },
             
             status_hl_group = {
-                [StatusType.Added]               = "DiagnosticInfo",
-                [StatusType.Copied]              = "DiagnosticInfo",
+                [StatusType.Added]               = "DiagnosticHint",
+                [StatusType.Copied]              = "DiagnosticHint",
                 [StatusType.Deleted]             = "DiagnosticError",
-                [StatusType.Ignored]             = "DiagnosticHint",
+                [StatusType.Ignored]             = "Identifier",
                 [StatusType.Modified]            = "DiagnosticWarn",
                 [StatusType.Renamed]             = "DiagnosticWarn",
                 [StatusType.TypeChanged]         = "DiagnosticWarn",
                 [StatusType.Unmerged]            = "DiagnosticError",
-                [StatusType.Untracked]           = "DiagnosticWarn",
+                [StatusType.Untracked]           = "DiagnosticHint",
                 [StatusType.External]            = "DiagnosticWarn",
             }
         })
