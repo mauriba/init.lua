@@ -4,9 +4,9 @@ return {
     dependencies = {
         { "echasnovski/mini.icons", opts = {} },
     },
-    config = function ()
+    config = function()
         local oil = require("oil")
-        oil.setup{
+        oil.setup {
             view_options = {
                 show_hidden = true
             },
@@ -29,6 +29,8 @@ return {
                 autosave_changes = "unmodified",
             },
             watch_for_changes = true,
+            skip_confirm_for_simple_edits = true,
+            prompt_save_on_select_new_entry = false,
         }
         -- Override Ex (explorer) so that Oil gets started instead of netrw
         vim.cmd["Ex"] = vim.cmd["Oil"]
