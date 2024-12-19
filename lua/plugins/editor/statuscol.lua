@@ -4,6 +4,7 @@ return {
         local builtin = require("statuscol.builtin")
         require("statuscol").setup({
             relculright = true,
+            ft_ignore = { "oil", },
             segments = {
                 {
                     sign = { name = { ".*" }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
