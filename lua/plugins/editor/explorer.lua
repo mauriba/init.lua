@@ -3,10 +3,14 @@ return {
     opts = {},
     dependencies = {
         { "echasnovski/mini.icons", opts = {} },
+        { "SirZenith/oil-vcs-status" },
     },
-    config = function ()
+    config = function()
         local oil = require("oil")
-        oil.setup{
+        oil.setup {
+            win_options = {
+                signcolumn = "yes",
+            },
             view_options = {
                 show_hidden = true
             },
@@ -29,8 +33,52 @@ return {
                 autosave_changes = "unmodified",
             },
             watch_for_changes = true,
+            skip_confirm_for_simple_edits = true,
+            prompt_save_on_select_new_entry = false,
         }
         -- Override Ex (explorer) so that Oil gets started instead of netrw
         vim.cmd["Ex"] = vim.cmd["Oil"]
+
+        local StatusType = require("oil-vcs-status.constant.status").StatusType
+        require("oil-vcs-status").setup({
+            status_symbol = {
+                [StatusType.Added]               = "",
+                [StatusType.Copied]              = "󰆏",
+                [StatusType.Deleted]             = "",
+                [StatusType.Ignored]             = "",
+                [StatusType.Modified]            = "",
+                [StatusType.Renamed]             = "",
+                [StatusType.TypeChanged]         = "󰉺",
+                [StatusType.Unmodified]          = " ",
+                [StatusType.Unmerged]            = "",
+                [StatusType.Untracked]           = "",
+                [StatusType.External]            = "",
+
+                [StatusType.UpstreamAdded]       = "󰈞",
+                [StatusType.UpstreamCopied]      = "󰈢",
+                [StatusType.UpstreamDeleted]     = "",
+                [StatusType.UpstreamIgnored]     = " ",
+                [StatusType.UpstreamModified]    = "󰏫",
+                [StatusType.UpstreamRenamed]     = "",
+                [StatusType.UpstreamTypeChanged] = "󱧶",
+                [StatusType.UpstreamUnmodified]  = " ",
+                [StatusType.UpstreamUnmerged]    = "",
+                [StatusType.UpstreamUntracked]   = " ",
+                [StatusType.UpstreamExternal]    = "",
+            },
+            
+            status_hl_group = {
+                [StatusType.Added]               = "DiagnosticHint",
+                [StatusType.Copied]              = "DiagnosticHint",
+                [StatusType.Deleted]             = "DiagnosticError",
+                [StatusType.Ignored]             = "Identifier",
+                [StatusType.Modified]            = "DiagnosticWarn",
+                [StatusType.Renamed]             = "DiagnosticWarn",
+                [StatusType.TypeChanged]         = "DiagnosticWarn",
+                [StatusType.Unmerged]            = "DiagnosticError",
+                [StatusType.Untracked]           = "DiagnosticHint",
+                [StatusType.External]            = "DiagnosticWarn",
+            }
+        })
     end
 }
