@@ -3,12 +3,6 @@
 ## 1.0.0 (2024-12-23)
 
 
-### ⚠ BREAKING CHANGES
-
-* **cpp:** change namespace generation in header snippet to first subdirectory only
-* add keymaps for lsp navigation on LspAttach
-* Remove configs that will be language-specific instead
-
 ### Features
 
 * &lt;leader&gt;cd changes CWD to buffer's directory ([6ae20eb](https://github.com/mauriba/init.lua/commit/6ae20ebb116c94bdf50c939e3e2c821eb0b0e4c1))
