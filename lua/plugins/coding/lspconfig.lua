@@ -43,8 +43,8 @@ return {
                 { name = 'nvim_lsp' },
                 { name = 'luasnip' }, -- For luasnip users.
                 { name = 'path' },
-                { name = 'copilot' },
             }, {
+                { name = 'copilot' },
                 { name = 'buffer' },
             }),
             formatting = {
@@ -76,6 +76,7 @@ return {
             group = lsp_group,
             callback = function(e)
                 local opts = { buffer = e.buf }
+                vim.keymap.set("n", "ga", function() vim.lsp.buf.code_action() end, opts)
                 vim.keymap.set("n", "gd", function() ts.lsp_definitions() end, opts)
                 vim.keymap.set("n", "gr", function() ts.lsp_references({ include_declaration = false }) end, opts)
                 vim.keymap.set("n", "gi", function() ts.lsp_implementations() end, opts)

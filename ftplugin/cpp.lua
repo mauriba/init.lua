@@ -4,6 +4,10 @@ require("config.coding.folding").addCommentStyle("cpp", {
 })
 require("config.coding.lspconfig").start("clangd", {
     -- disable for no argument autocomplete: function-arg-placeholders
+    cmd = {
+        "clangd",
+        "--offset-encoding=utf-16",
+    },
 })
 
 -- region Debugger
