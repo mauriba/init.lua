@@ -5,6 +5,7 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = {
         "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
@@ -22,6 +23,12 @@ return {
 
         require("fidget").setup({})
         require("mason").setup({})
+        require("mason-lspconfig").setup({
+            ensure_installed = {
+                "lua_ls", "clangd", "powershell_es", "terraformls"
+            },
+            automatic_installation = true,
+        })
         require("copilot_cmp").setup({})
 
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
