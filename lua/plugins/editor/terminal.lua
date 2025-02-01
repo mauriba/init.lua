@@ -2,20 +2,37 @@ return {
     {
         'akinsho/toggleterm.nvim',
         version = "*",
-        config = function ()
-            require("toggleterm").setup{
+        config = function()
+            -- Set to PowerShell on windows
+            if vim.fn.has("win32") == 1 then
+                local powershell_options = {
+                    shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
+                    shellcmdflag =
+                    "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+                    shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+                    shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+                    shellquote = "",
+                    shellxquote = "",
+                }
+
+                for option, value in pairs(powershell_options) do
+                    vim.opt[option] = value
+                end
+            end
+
+            require("toggleterm").setup {
                 hide_numbers = false,
                 direction = "horizontal",
             }
-            vim.keymap.set("n", "ö", function ()
+            vim.keymap.set("n", "ö", function()
                 -- TODO: Find out how to conveniently add support
                 -- for multiple terminals, e.g. using multiple tabs
                 -- in one window
                 vim.cmd("ToggleTerm")
-            end) 
+            end)
 
             function _G.set_terminal_keymaps()
-                local opts = {buffer = 0}
+                local opts = { buffer = 0 }
                 vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
                 vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
                 vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
@@ -37,16 +54,16 @@ return {
             "nvim-lua/popup.nvim",
             "nvim-lua/plenary.nvim",
         },
-        config = function ()
+        config = function()
             require("telescope-toggleterm").setup {
                 telescope_mappings = {
                     -- <ctrl-c> : kill the terminal buffer (default) .
                     ["<C-c>"] = require("telescope-toggleterm").actions.exit_terminal,
                 },
             }
-            vim.keymap.set("n", "<leader>pt", function ()
+            vim.keymap.set("n", "<leader>pt", function()
                 require('telescope-toggleterm').open()
-            end, {desc = "Project terminals"})
+            end, { desc = "Project terminals" })
         end,
     }
 }
