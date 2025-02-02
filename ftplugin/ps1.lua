@@ -8,6 +8,9 @@ require("config.coding.lspconfig").start("powershell_es", {
     bundle_path = vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services",
     shell = pcall(vim.fn.cmd, "pwsh") and "pwsh" or "powershell"
 })
+require("config.coding.repl").add_repl({
+    command = { pcall(vim.fn.cmd, "pwsh") and "pwsh" or "powershell" }
+})
 
 vim.bo.tabstop = 4
 vim.bo.softtabstop = 4
