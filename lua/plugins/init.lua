@@ -1,4 +1,4 @@
 return {
-    -- { import = "plugins.editor" },
+    { import = "plugins.editor" },
     -- { import = "plugins.coding" },
 }
