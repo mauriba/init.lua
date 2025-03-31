@@ -16,8 +16,8 @@ return {
             { "<leader>pg", nil, desc = "Telescope: Project Git Files" },
             { "<leader>pc", nil, desc = "Telescope: Project Color Themes" },
             { "<leader>ps", nil, desc = "Telescope: Project Search (Grep)" },
-            { "<leader>pws", nil, desc = "Telescope: Project Word Search under cursor" },
-            { "<leader>pWs", nil, desc = "Telescope: Project Word Search under cursor" },
+            { "<leader>pws", nil, desc = "Telescope: Project Search under cursor" },
+            { "<leader>pWs", nil, desc = "Telescope: Project Search around cursor" },
         },
 
         config = function()
