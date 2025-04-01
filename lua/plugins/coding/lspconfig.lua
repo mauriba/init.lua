@@ -23,6 +23,7 @@ return {
             formatters_by_ft = {
             }
         })
+
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
         -- Create default capabilities to request from lsps
@@ -85,7 +86,6 @@ return {
             }
         })
         require("copilot_cmp").setup({})
-
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
         cmp.setup({
