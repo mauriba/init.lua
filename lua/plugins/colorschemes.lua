@@ -25,6 +25,16 @@ vim.opt.wildignore:append({
     "zellner.vim",
 })
 
+-- Make the tabline and background transparent
+function MakeTransparent()
+    vim.api.nvim_set_hl(0, "TabLine", { bg = "none" })
+    vim.api.nvim_set_hl(0, "TabLineFill", { bg = "none" })
+    vim.api.nvim_set_hl(0, "TabLineSelect", { bg = "none" })
+    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+end
+vim.keymap.set("n", "<leader>tb", MakeTransparent, { desc = "Make background transparent" })
+
 -- List of colorschemes
 local colorschemes = {
     {
