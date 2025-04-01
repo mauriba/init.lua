@@ -3,7 +3,7 @@ return {
     event = "VeryLazy",
     dependencies = { "MunifTanjim/nui.nvim" },
     opts = {
-        enabled = true,
+        enabled = false,
         disabled_keys = {
             ["<Up>"] = { "n" },
             ["<Down>"] = { "n" },
