@@ -43,7 +43,9 @@ return {
         require("mason").setup({})
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "lua_ls", "clangd", "powershell_es", "terraformls"
+                "lua_ls", "clangd", "powershell_es", "terraformls",
+                "texlab", "pyright", "markdown_oxide", "neocmake",
+                "jsonls", "yamlls",
             },
             automatic_installation = true,
             handlers = {
@@ -51,6 +53,24 @@ return {
                     require("lspconfig")[server_name].setup {
                         capabilities = capabilities
                     }
+                end,
+
+                markdown_oxide = function()
+                    require("lspconfig").markdown_oxide.setup({
+                        -- Ensure that dynamicRegistration is enabled! This allows the LS to take into account actions like the
+                        -- Create Unresolved File code action, resolving completions for unindexed code blocks, ...
+                        capabilities = vim.tbl_deep_extend(
+                            'force',
+                            capabilities,
+                            {
+                                workspace = {
+                                    didChangeWatchedFiles = {
+                                        dynamicRegistration = true,
+                                    },
+                                },
+                            }
+                        )
+                    })
                 end,
 
                 zls = function()
@@ -67,7 +87,6 @@ return {
                     })
                     vim.g.zig_fmt_parse_errors = 0
                     vim.g.zig_fmt_autosave = 0
-
                 end,
                 lua_ls = function()
                     local lspconfig = require("lspconfig")
@@ -102,7 +121,14 @@ return {
             }),
             sources = cmp.config.sources({
                 { name = "copilot", group_index = 2 },
-                { name = 'nvim_lsp' },
+                {
+                    name = 'nvim_lsp',
+                    option = {
+                        markdown_oxide = {
+                            keyword_pattern = [[\(\k\| \|\/\|#\)\+]]
+                        }
+                    }
+                },
                 { name = 'luasnip' }, -- For luasnip users.
                 { name = "path" },
             }, {
@@ -117,7 +143,7 @@ return {
             },
         })
 
-        vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg ="#6CC644"})
+        vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
         vim.diagnostic.config({
             -- update_in_insert = true,
             float = {
@@ -136,15 +162,22 @@ return {
         vim.api.nvim_create_autocmd("LspAttach", {
             group = lsp_group,
             callback = function(e)
-                vim.keymap.set("n", "ga", function() vim.lsp.buf.code_action() end, { buffer = e.buf, desc = "LSP Code Action" })
-                vim.keymap.set("n", "gd", function() ts.lsp_definitions() end, { buffer = e.buf, desc = "LSP Goto Definition" })
-                vim.keymap.set("n", "gr", function() ts.lsp_references({ include_declaration = false }) end, { buffer = e.buf, desc = "LSP Goto References" })
-                vim.keymap.set("n", "gi", function() ts.lsp_implementations() end, { buffer = e.buf, desc = "LSP Goto Implementations" })
+                vim.keymap.set("n", "ga", function() vim.lsp.buf.code_action() end,
+                    { buffer = e.buf, desc = "LSP Code Action" })
+                vim.keymap.set("n", "gd", function() ts.lsp_definitions() end,
+                    { buffer = e.buf, desc = "LSP Goto Definition" })
+                vim.keymap.set("n", "gr", function() ts.lsp_references({ include_declaration = false }) end,
+                    { buffer = e.buf, desc = "LSP Goto References" })
+                vim.keymap.set("n", "gi", function() ts.lsp_implementations() end,
+                    { buffer = e.buf, desc = "LSP Goto Implementations" })
                 vim.keymap.set("n", "gR", function() vim.lsp.buf.rename() end, { buffer = e.buf, desc = "LSP Rename" })
                 vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, { buffer = e.buf, desc = "LSP Hover" })
-                vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, { buffer = e.buf, desc = "Open Diagnostics" })
-                vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, { buffer = e.buf, desc = "Next Diagnostic" })
-                vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, { buffer = e.buf, desc = "Previous Diagnostic" })
+                vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end,
+                    { buffer = e.buf, desc = "Open Diagnostics" })
+                vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end,
+                    { buffer = e.buf, desc = "Next Diagnostic" })
+                vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end,
+                    { buffer = e.buf, desc = "Previous Diagnostic" })
             end
         })
 

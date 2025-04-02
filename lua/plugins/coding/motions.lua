@@ -4,6 +4,7 @@ return {
         dependencies = {
             "nvim-treesitter",
         },
+        event = "InsertEnter",
         keys = {
             { "af", nil, desc = "Select around function" },
             { "if", nil, desc = "Select inside function" },
