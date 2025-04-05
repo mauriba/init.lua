@@ -145,7 +145,8 @@ return {
 
         vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
         vim.diagnostic.config({
-            -- update_in_insert = true,
+            virtual_text = true,
+            update_in_insert = true,
             float = {
                 focusable = false,
                 style = "minimal",

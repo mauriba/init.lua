@@ -1,7 +1,9 @@
 -- NOTE: You can use Oil over SSH: nvim oil-ssh://[username@]hostname[:port]/[path]
 return {
     'stevearc/oil.nvim',
-    dependencies = { "echasnovski/mini.icons" },
+    dependencies = { "echasnovski/mini.icons",
+        { "SirZenith/oil-vcs-status" },
+    },
     lazy = false,
     keys = {
         { "-", "<CMD>Oil<CR>", desc = "Open parent directory" }
@@ -23,7 +25,7 @@ return {
             -- Window-local options to use for oil buffers
             win_options = {
                 wrap = false,
-                signcolumn = "no",
+                signcolumn = "yes",
                 cursorcolumn = false,
                 foldcolumn = "0",
                 spell = false,
@@ -200,6 +202,49 @@ return {
             keymaps_help = {
                 border = "rounded",
             },
+        })
+
+        -- Icons for git status in oil
+        local StatusType = require("oil-vcs-status.constant.status").StatusType
+        require("oil-vcs-status").setup({
+            status_symbol = {
+                [StatusType.Added]               = "",
+                [StatusType.Copied]              = "󰆏",
+                [StatusType.Deleted]             = "",
+                [StatusType.Ignored]             = "",
+                [StatusType.Modified]            = "",
+                [StatusType.Renamed]             = "",
+                [StatusType.TypeChanged]         = "󰉺",
+                [StatusType.Unmodified]          = " ",
+                [StatusType.Unmerged]            = "",
+                [StatusType.Untracked]           = "",
+                [StatusType.External]            = "",
+
+                [StatusType.UpstreamAdded]       = "󰈞",
+                [StatusType.UpstreamCopied]      = "󰈢",
+                [StatusType.UpstreamDeleted]     = "",
+                [StatusType.UpstreamIgnored]     = " ",
+                [StatusType.UpstreamModified]    = "󰏫",
+                [StatusType.UpstreamRenamed]     = "",
+                [StatusType.UpstreamTypeChanged] = "󱧶",
+                [StatusType.UpstreamUnmodified]  = " ",
+                [StatusType.UpstreamUnmerged]    = "",
+                [StatusType.UpstreamUntracked]   = " ",
+                [StatusType.UpstreamExternal]    = "",
+            },
+
+            status_hl_group = {
+                [StatusType.Added]       = "DiagnosticHint",
+                [StatusType.Copied]      = "DiagnosticHint",
+                [StatusType.Deleted]     = "DiagnosticError",
+                [StatusType.Ignored]     = "Identifier",
+                [StatusType.Modified]    = "DiagnosticWarn",
+                [StatusType.Renamed]     = "DiagnosticWarn",
+                [StatusType.TypeChanged] = "DiagnosticWarn",
+                [StatusType.Unmerged]    = "DiagnosticError",
+                [StatusType.Untracked]   = "DiagnosticHint",
+                [StatusType.External]    = "DiagnosticWarn",
+            }
         })
     end
 }
