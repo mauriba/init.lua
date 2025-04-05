@@ -1,12 +1,12 @@
 -- NOTE: You can use Oil over SSH: nvim oil-ssh://[username@]hostname[:port]/[path]
 return {
     'stevearc/oil.nvim',
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    dependencies = { "echasnovski/mini.icons" },
     lazy = false,
     keys = {
         { "-", "<CMD>Oil<CR>", desc = "Open parent directory" }
     },
-    config = function ()
+    config = function()
         require("oil").setup({
             default_file_explorer = true,
             columns = {
