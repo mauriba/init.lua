@@ -6,17 +6,7 @@
 - [Nvim Notify](https://github.com/rcarriga/nvim-notify)
 - [Lua Neovim LSP](https://github.com/folke/lazydev.nvim)
 - [Move selected lines up and down](https://github.com/kobbikobb/move-lines.nvim)
-
-## List of languages that should work
-
-- PowerShell
-- Lua
-- LaTeX
-- Python
-- Markdown
-- C++
-- CMake
-- CSV
-- JSON
-- YAML
-- Terraform
+- plugin that enables lsps in markdown files
+- markdown autocomplete (e.g. for bullet points)
+- proper terminal support
+- proper repl support
