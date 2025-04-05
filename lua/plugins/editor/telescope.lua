@@ -11,13 +11,24 @@ return {
             },
         },
         keys = {
-            { "<leader>pb", nil, desc = "Telescope: Project Buffers" },
-            { "<leader>pf", nil, desc = "Telescope: Project Files" },
-            { "<leader>pg", nil, desc = "Telescope: Project Git Files" },
-            { "<leader>pc", nil, desc = "Telescope: Project Color Themes" },
-            { "<leader>ps", nil, desc = "Telescope: Project Search (Grep)" },
-            { "<leader>pws", nil, desc = "Telescope: Project Search under cursor" },
-            { "<leader>pWs", nil, desc = "Telescope: Project Search around cursor" },
+            { "<leader>pb", "<cmd>Telescope buffers<cr>", desc = "Telescope: Project Buffers" },
+            { "<leader>pf", "<cmd>Telescope find_files<cr>", desc = "Telescope: Project Files" },
+            { "<leader>pg", "<cmd>Telescope git_files<cr>", desc = "Telescope: Project Git Files" },
+            { "<leader>pn", "<cmd>Telescope notify<cr>", desc = "Telescope: Project Notifications" },
+            { "<leader>pc", "<cmd>Telescope colorscheme<cr>", desc = "Telescope: Project Color Themes" },
+            { "<leader>ph", "<cmd>Telescope help_tags<cr>", desc = "Telescope: Help Tags" },
+            { "<leader>pk", "<cmd>Telescope keymaps<cr>", desc = "Telescope: Key Maps" },
+            { "<leader>ps", function ()
+                require("telescope.builtin").grep_string({ search = vim.fn.input("Grep > ") })
+            end, desc = "Telescope: Project Search (Grep)" },
+            { "<leader>pws", function ()
+                local word = vim.fn.expand("<cword>")
+                require("telescope.builtin").grep_string({ search = word })
+            end, desc = "Telescope: Project Search under cursor" },
+            { "<leader>pWs", function ()
+                local word = vim.fn.expand("<cWORD>")
+                require("telescope.builtin").grep_string({ search = word })
+            end, desc = "Telescope: Project Search around cursor" },
         },
 
         config = function()
@@ -42,25 +53,6 @@ return {
             if pcall(require, 'fzf_lib') then
                 require('telescope').load_extension('fzf')
             end
-
-            -- 2. Set up keybinds
-            local builtin = require('telescope.builtin')
-            vim.keymap.set('n', '<leader>pb', builtin.buffers)
-            vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
-            vim.keymap.set('n', '<leader>pg', builtin.git_files, {})
-            vim.keymap.set('n', '<leader>pc', builtin.colorscheme, {})
-            vim.keymap.set('n', '<leader>ps', function()
-                builtin.grep_string({ search = vim.fn.input("Grep > ") })
-            end)
-            vim.keymap.set('n', '<leader>pws', function()
-                local word = vim.fn.expand("<cword>")
-                builtin.grep_string({ search = word })
-            end)
-            vim.keymap.set('n', '<leader>pWs', function()
-                local word = vim.fn.expand("<cWORD>")
-                builtin.grep_string({ search = word })
-            end)
-            vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
         end
     },
 }
