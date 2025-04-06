@@ -39,7 +39,7 @@ return {
             ensure_installed = {
                 "lua_ls", "clangd", "powershell_es", "terraformls",
                 "texlab", "pyright", "markdown_oxide", "neocmake",
-                "jsonls", "yamlls",
+                "jsonls", "yamlls", "ts_ls",
             },
             automatic_installation = true,
             handlers = {
