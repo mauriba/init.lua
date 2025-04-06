@@ -1,7 +1,3 @@
-function Test()
-    print("test")
-end
-
 return {
     "milanglacier/yarepl.nvim",
     keys = {
@@ -36,7 +32,7 @@ return {
         -- `require("yarepl").setup {}` is sufficient.
         local yarepl = require("yarepl")
 
-        yarepl.setup {
+        yarepl.setup({
             -- see `:h buflisted`, whether the REPL buffer should be buflisted.
             buflisted = true,
             -- whether the REPL buffer should be a scratch buffer.
@@ -88,6 +84,6 @@ return {
                     send_delayed_cr_after_sending = true,
                 },
             },
-        }
+        })
     end
 }
