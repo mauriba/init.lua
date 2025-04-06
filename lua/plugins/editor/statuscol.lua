@@ -1,5 +1,16 @@
 return {
     "luukvbaal/statuscol.nvim",
+    event = "BufReadPost *.*",
+    dependencies = {
+        {
+            "lewis6991/gitsigns.nvim",
+            config = function()
+                require("gitsigns").setup({
+                    attach_to_untracked = true,
+                })
+            end
+        }
+    },
     config = function()
         local builtin = require("statuscol.builtin")
         require("statuscol").setup({

@@ -1,0 +1,41 @@
+! Enter configuration mode
+enable
+configure terminal
+
+hostname testrouter
+
+! Enable SSH for multilayer switches and routers
+ip domain name spaceone-corp.com
+username admin password bh3ab
+crypto key zeroize rsa
+yes
+crypto key generate rsa
+1024
+line vty 0 15
+login local
+transport input ssh
+exit
+ip ssh version 2
+
+interface range fa0/0-1
+  no shutdown
+
+interface fa0/0
+  ip address 10.4.0.1 255.255.255.0
+  exit
+
+interface g0/0/0
+  ip address 10.0.0.33 255.255.255.252
+  ip ospf 10 area 0
+  no shutdown
+  exit
+
+interface g0/1/0
+  ip address 10.0.0.30 255.255.255.252
+  ip ospf 10 area 0
+  no shutdown
+  exit
+
+router ospf 10
+  router-id 10.0.0.33
+  network 10.4.0.0 0.0.0.255 area 0

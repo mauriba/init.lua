@@ -1,147 +1,80 @@
--- NOTE: Set folding configs similar to those: https://github.com/kevinhwang91/nvim-ufo?tab=readme-ov-file
-
--- Keybinds:
--- zo: open fold under cursor
--- zO: open all folds under cursor recursively
--- zc: close fold under cursor
--- za: toggle fold under cursor
--- zR: open all folds
--- zM: close all folds
-
--- Helper function for custom fold generators
-local function getLine(bufnr, lineno)
-    return vim.api.nvim_buf_get_lines(bufnr, lineno, lineno + 1, false)[1] or ""
-end
-
--- Fold generator for blocks of comments
-local function get_comment_folds(bufnr)
-    local comment_folds = {}
-    local line_count = vim.api.nvim_buf_line_count(bufnr)
-
-    local comments = require("config.coding.folding").getCommentStyle()
-    comments.line = comments.line or vim.bo.commentstring:match("^(.-)%s*%%s")
-
-    -- region comment detection
-    local function isCommentLine(line)
-        return comments.line and line:match("^%s*" .. vim.pesc(comments.line))
-    end
-    local function isBlockStart(line)
-        return comments.block and line:find("%s*" .. vim.pesc(comments.block.open))
-    end
-    local function isBlockEnd(line)
-        return comments.block and line:find("%s*" .. vim.pesc(comments.block.close))
-    end
-    -- endregion
-    
-    local iLine = 0
-    while iLine < line_count do
-        if isBlockStart(getLine(bufnr, iLine)) then
-            local comment_start = iLine
-            repeat
-               iLine = iLine + 1
-            until isBlockEnd(getLine(bufnr, iLine)) or not (iLine < line_count)
-            if iLine < line_count then
-                table.insert(comment_folds, { startLine = comment_start, endLine = iLine })
-            else
-                iLine = comment_start
-            end
-        end
-
-        if isCommentLine(getLine(bufnr, iLine)) then
-            local comment_start = iLine
-            repeat
-               iLine = iLine + 1
-            until not isCommentLine(getLine(bufnr, iLine)) or not (iLine < line_count)
-            if iLine < line_count then
-                table.insert(comment_folds, { startLine = comment_start, endLine = iLine - 1 })
-            else
-                iLine = comment_start
-            end
-        end
-
-        iLine = iLine + 1
-    end
-
-    return comment_folds
-end
-
--- Fold generator for regions
--- BUG: Region fold extends if it contains a sub fold that is closed outside of the region
-local function get_region_folds(bufnr)
-    local region_folds = {}
-    local line_count = vim.api.nvim_buf_line_count(bufnr)
-
-    local comments = require("config.coding.folding").getCommentStyle()
-    comments.line = comments.line or vim.bo.commentstring:match("^(.-)%s*%%s")
-
-    local function isRegionStart(line)
-        return (comments.block and line:find("%s*" .. vim.pesc(comments.block.open) .. "%s*region"))
-            or (comments.line and line:find("%s*" .. vim.pesc(comments.line) .. "%s*region"))
-            or line:find("#pragma%s*region")
-    end
-    local function isRegionEnd(line)
-        return (comments.block and line:find("%s*" .. vim.pesc(comments.block.open) .. "%s*endregion"))
-            or (comments.line and line:find("%s*" .. vim.pesc(comments.line) .. "%s*endregion"))
-            or line:find("#pragma%s*endregion")
-    end
-
-    local iLine = 0
-    while iLine < line_count do
-        if isRegionStart(getLine(bufnr, iLine)) then
-            local region_start = iLine
-            repeat
-               iLine = iLine + 1
-            until isRegionEnd(getLine(bufnr, iLine)) or not (iLine < line_count)
-            if iLine < line_count then
-                table.insert(region_folds, { startLine = region_start, endLine = iLine })
-            else
-                iLine = region_start
-            end
-        end
-        iLine = iLine + 1
-    end
-
-    return region_folds
-end
-
--- Merges custom folds for comment blocks and regions
--- with treesitter folds. This function is passed to UFO for execution.
-local function get_custom_folds(bufnr)
-    local folds = require('ufo').getFolds(bufnr, "treesitter") or {}
-    local region_folds = get_region_folds(bufnr)
-    local comment_folds = get_comment_folds(bufnr)
-    for _, fold in ipairs(region_folds) do
-        table.insert(folds, fold)
-    end
-    for _, fold in ipairs(comment_folds) do
-        table.insert(folds, fold)
-    end
-    return folds
-end
-
 return {
-    -- UFO folding
-    {
-        "kevinhwang91/nvim-ufo",
-        dependencies = {
-            "kevinhwang91/promise-async",
-        },
-        event = "BufReadPost",
-        opts = {
-            provider_selector = function()
-                return get_custom_folds
-            end,
-        },
-
-        init = function()
-            vim.keymap.set("n", "zR", function()
-                require("ufo").openAllFolds()
-            end)
-            vim.keymap.set("n", "zM", function()
-                require("ufo").closeAllFolds()
-            end)
-        end,
+    "kevinhwang91/nvim-ufo",
+    dependencies = {
+        "kevinhwang91/promise-async",
     },
+    event = "BufReadPost",
+    keys = {
+        {
+            "az",
+            "<cmd>lua require('ufo').foldScope('outer')<CR>",
+            mode = { "o", "x" },
+            desc = "text-obj: a-fold",
+        },
+        {
+            "iz",
+            "<cmd>lua require('ufo').foldScope('inner')<CR>",
+            mode = { "o", "x" },
+            desc = "text-obj: i-fold",
+        },
+    },
+    config = function()
+        -- thanks to https://www.reddit.com/r/neovim/comments/1e7rteu/create_textobject_az_and_iz_for_currentfoldscope/ 
+        -- see https://github.com/kevinhwang91/nvim-ufo/blob/1b5f2838099f283857729e820cc05e2b19df7a2c/lua/ufo/main.lua#L134
+        local getFoldScope = function()
+            local bufnr = vim.api.nvim_get_current_buf()
+            local foldRanges = require("ufo.fold").get(bufnr).foldRanges
+
+            local lnum = vim.fn.line(".")
+            local curStartLine, curEndLine = 0, 0
+            for _, range in ipairs(foldRanges) do
+                local sl, el = range.startLine, range.endLine
+                if curStartLine < sl and sl < lnum and lnum <= el + 1 then
+                    curStartLine, curEndLine = sl, el
+                end
+            end
+            if curStartLine == 0 and curEndLine == 0 then
+                return lnum, lnum
+            end
+            return curStartLine + 1, curEndLine + 1
+        end
+
+        -- see https://github.com/chrisgrieser/nvim-various-textobjs/blob/c2fd8bf4c86ec8d85bd0265074711027e640863a/lua/various-textobjs/linewise-textobjs.lua#L16
+        local lineWiseSelect = function(startLine, endLine)
+            -- save last position in jumplist like vim native textobj
+            vim.cmd.normal({ "m`", bang = true })
+            vim.api.nvim_win_set_cursor(0, { startLine, 0 })
+            if not vim.fn.mode():find("V") then
+                vim.cmd.normal({ "V", bang = true })
+            end
+            -- move cursor to end of visual
+            vim.cmd.normal({ "o", bang = true })
+            vim.api.nvim_win_set_cursor(0, { endLine, 0 })
+        end
+
+        local ufo = require("ufo")
+
+        ufo.foldScope = function(scope)
+            local sl, el = getFoldScope()
+            vim.cmd(("silent! %d,%d foldopen"):format(sl, el))
+
+            if scope == "inner" then
+                local tailFt = { "python" }
+                sl = vim.fn.min({ sl + 1, el })
+                if not vim.tbl_contains(tailFt, vim.bo.ft) then
+                    el = vim.fn.max({ el - 1, sl })
+                end
+            end
+
+            lineWiseSelect(sl, el)
+        end
+
+        ufo.setup({
+            provider_selector = function(bufnr, filetype, buftype)
+                return { "treesitter", "indent" }
+            end,
+        })
+    end,
     -- Folding preview, by default h and l keys are used
     -- On first press of h key, when cursor is on a closed fold, the preview will be shown.
     -- On second press the preview will be closed and fold will be opened.

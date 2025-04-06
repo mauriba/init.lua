@@ -1,15 +1,22 @@
--- Use this file to add language types for ftplugin
+-- Use this file to add file extension -> language mappings
+local langs = {
+    -- Add your language mappings here
+    -- ["language"] = "file_extensions",
+    terraform = { "tf", "tfvars" },
+    cisco = { "cisco" },
+}
 
 vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = { "*.tf", "*.tfvars" },
-    callback = function ()
-        vim.opt.filetype = "terraform"
-    end
-})
+    callback = function()
+        local ext = vim.fn.expand("%:e")
 
-vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = { "*.cisco" },
-    callback = function ()
-        vim.opt.filetype = "cisco"
+        for lang, extensions in pairs(langs) do
+            for _, extension in ipairs(extensions) do
+                if ext == extension then
+                    vim.bo.filetype = lang
+                    return
+                end
+            end
+        end
     end
 })

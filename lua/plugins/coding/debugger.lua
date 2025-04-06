@@ -6,6 +6,12 @@ return {
         "nvim-neotest/nvim-nio",
         "williamboman/mason.nvim",
     },
+    keys = {
+        { "<leader>db", nil, desc = "DAP Toggle Breakpoint" },
+        { "<leader>dr", nil, desc = "DAP Continue" },
+        { "<leader>dc", nil, desc = "DAP Run to Cursor" },
+        { "<leader>dk", nil, desc = "DAP Step Back" },
+    },
     config = function()
         local dap = require("dap")
         local dapui = require("dapui")
