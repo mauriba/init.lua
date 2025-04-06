@@ -1,6 +1,10 @@
 return {
     "folke/todo-comments.nvim",
     event = "BufEnter *.*",
+    keys = {
+        { "<leader>tdt", "<cmd>TodoTelescope<cr>", desc = "Todo: Telescope" },
+        { "<leader>tdq", "<cmd>TodoQuickFix<cr>", desc = "Todo: Quickfix" },
+    },
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
         keywords = {
