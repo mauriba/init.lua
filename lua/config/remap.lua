@@ -12,8 +12,14 @@ vim.keymap.set("t", "<C-j>", "<C-\\><C-n><C-w>j", { desc = "Move to below window
 vim.keymap.set("t", "<C-k>", "<C-\\><C-n><C-w>k", { desc = "Move to above window" })
 vim.keymap.set("t", "<C-l>", "<C-\\><C-n><C-w>l", { desc = "Move to right window" })
 
+-- Move lines around
+vim.api.nvim_set_keymap('v', "<C-J>", ":m '>+1<CR>gv=gv", { noremap = true, silent = true, desc = "Move line down" })
+vim.api.nvim_set_keymap('v', "<C-K>", ":m '<-2<CR>gv=gv", { noremap = true, silent = true, desc = "Move line up" })
+vim.api.nvim_set_keymap('v', "<C-H>", "<gv", { noremap = true, silent = true, desc = "Move line left" })
+vim.api.nvim_set_keymap('v', "<C-L>", ">gv", { noremap = true, silent = true, desc = "Move line right" })
+
 vim.keymap.set("n", "<leader>gq", function()
-    vim.lsp.buf.format({timeout_ms = 6000})
+    vim.lsp.buf.format({ timeout_ms = 6000 })
 end, { desc = "Format whole document" })
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
