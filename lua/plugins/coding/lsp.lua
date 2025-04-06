@@ -3,7 +3,6 @@ return {
     event = "BufReadPost *.*",
     cmd = { "LspInfo", "LspInstall", "LspUninstall" },
     dependencies = {
-        "stevearc/conform.nvim",
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
         "hrsh7th/cmp-nvim-lsp",
@@ -19,11 +18,6 @@ return {
     },
 
     config = function()
-        require("conform").setup({
-            formatters_by_ft = {
-            }
-        })
-
         local cmp = require('cmp')
         local cmp_lsp = require("cmp_nvim_lsp")
         -- Create default capabilities to request from lsps
