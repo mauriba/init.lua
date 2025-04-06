@@ -1,6 +1,3 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
 function string:ends_with(suffix)
     return self:sub(- #suffix) == suffix
 end
@@ -10,6 +7,7 @@ function string:starts_with(prefix)
 end
 
 vim.keymap.set("n", "<leader>gq", "gggqG", { desc = "Format whole document" })
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
 -- Change current directory to the current buffer's path
 vim.keymap.set("n", "<leader>cd", function()

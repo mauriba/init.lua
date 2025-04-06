@@ -1,3 +1,6 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 vim.opt.guicursor = ""
 
 vim.opt.nu = true
@@ -19,6 +22,9 @@ Indent(4) -- Default indentation: 4 spaces
 vim.opt.smartindent = true
 
 vim.opt.wrap = false
+vim.keymap.set("n", "<leader>wl", function()
+    vim.wo.wrap = not vim.wo.wrap
+end, { desc = "Toggle wrap lines" })
 
 vim.opt.swapfile = false
 vim.opt.backup = false
