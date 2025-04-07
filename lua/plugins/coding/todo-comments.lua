@@ -1,6 +1,6 @@
 return {
     "folke/todo-comments.nvim",
-    event = "BufEnter *.*",
+    event = "VeryLazy",
     keys = {
         { "<leader>tdt", "<cmd>TodoTelescope<cr>", desc = "Todo: Telescope" },
         { "<leader>tdq", "<cmd>TodoQuickFix<cr>", desc = "Todo: Quickfix" },

@@ -1,6 +1,6 @@
 return {
     "luukvbaal/statuscol.nvim",
-    event = "BufReadPost *.*",
+    event = "VeryLazy",
     dependencies = {
         {
             "lewis6991/gitsigns.nvim",

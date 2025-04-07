@@ -1,6 +1,6 @@
 return {
     "neovim/nvim-lspconfig",
-    event = "BufReadPost *.*",
+    event = "VeryLazy",
     cmd = { "LspInfo", "LspInstall", "LspUninstall" },
     dependencies = {
         "williamboman/mason.nvim",
@@ -18,7 +18,7 @@ return {
     },
 
     config = function()
-        local cmp = require('cmp')
+        local cmp = require("cmp")
         local cmp_lsp = require("cmp_nvim_lsp")
         -- Create default capabilities to request from lsps
         local capabilities = vim.tbl_deep_extend(
@@ -39,7 +39,7 @@ return {
             ensure_installed = {
                 "lua_ls", "clangd", "powershell_es", "terraformls",
                 "texlab", "pyright", "markdown_oxide", "neocmake",
-                "jsonls", "yamlls", "ts_ls",
+                "jsonls", "yamlls", "ts_ls", "sqlls",
             },
             automatic_installation = true,
             handlers = {
@@ -54,7 +54,7 @@ return {
                         -- Ensure that dynamicRegistration is enabled! This allows the LS to take into account actions like the
                         -- Create Unresolved File code action, resolving completions for unindexed code blocks, ...
                         capabilities = vim.tbl_deep_extend(
-                            'force',
+                            "force",
                             capabilities,
                             {
                                 workspace = {
@@ -101,33 +101,34 @@ return {
         require("copilot_cmp").setup({})
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
+        local sources = {
+            { name = "luasnip" }, -- For luasnip users.
+            {
+                name = "nvim_lsp",
+                option = {
+                    markdown_oxide = {
+                        keyword_pattern = [[\(\k\| \|\/\|#\)\+]]
+                    }
+                }
+            },
+            { name = "path" },
+            { name = "copilot" },
+            { name = "buffer" },
+        }
+
         cmp.setup({
             snippet = {
                 expand = function(args)
-                    require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                    require("luasnip").lsp_expand(args.body) -- For `luasnip` users.
                 end,
             },
             mapping = cmp.mapping.preset.insert({
-                ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-                ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-                ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+                ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
+                ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
+                ["<C-y>"] = cmp.mapping.confirm({ select = true }),
                 ["<C-Space>"] = cmp.mapping.complete(),
             }),
-            sources = cmp.config.sources({
-                { name = 'luasnip' }, -- For luasnip users.
-                {
-                    name = 'nvim_lsp',
-                    option = {
-                        markdown_oxide = {
-                            keyword_pattern = [[\(\k\| \|\/\|#\)\+]]
-                        }
-                    }
-                },
-                { name = "path" },
-                { name = "copilot" },
-            }, {
-                { name = 'buffer' },
-            }),
+            sources = cmp.config.sources(sources),
             formatting = {
                 format = require("lspkind").cmp_format({
                     mode = "symbol_text",
@@ -135,6 +136,12 @@ return {
                     symbol_map = { Copilot = "" }
                 })
             },
+        })
+
+        cmp.setup.filetype({ "sql", "mysql", "plsql" }, {
+            sources = vim.list_extend(sources, {
+                { name = "vim-dadbod-completion" },
+            }),
         })
 
         vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
