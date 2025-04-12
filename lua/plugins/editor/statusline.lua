@@ -7,10 +7,12 @@ return {
             sections = {
                 lualine_a = { "mode" },
                 lualine_b = { "branch", "diff" },
-                lualine_c = { "filename" },
+                lualine_c = { function()
+                    return vim.fn.expand("%:.")
+                end },
                 lualine_x = { "encoding", "fileformat", "filetype" },
                 lualine_y = { {
-                    function ()
+                    function()
                         local starts = vim.fn.line("v")
                         local ends = vim.fn.line(".")
 
@@ -23,10 +25,20 @@ return {
                     cond = function()
                         return vim.fn.mode():find("[Vv]") ~= nil
                     end,
-                }},
+                } },
                 lualine_z = {
                     "location",
                 },
+            },
+            inactive_sections = {
+                lualine_a = {},
+                lualine_b = {},
+                lualine_c = { function()
+                    return vim.fn.expand("%:.")
+                end },
+                lualine_x = {},
+                lualine_y = {},
+                lualine_z = {}
             }
         })
     end
