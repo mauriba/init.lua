@@ -37,3 +37,5 @@ end)
 
 -- Let Q also quit neovim
 vim.api.nvim_create_user_command("Q", ":q", {})
+-- Let W also write file
+vim.api.nvim_create_user_command("W", ":w", {})
