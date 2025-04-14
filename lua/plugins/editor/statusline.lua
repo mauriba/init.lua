@@ -39,7 +39,8 @@ return {
                 lualine_x = {},
                 lualine_y = {},
                 lualine_z = {}
-            }
+            },
+            extensions = { "quickfix", "oil" },
         })
     end
 }
