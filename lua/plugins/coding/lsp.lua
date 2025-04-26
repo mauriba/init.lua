@@ -1,6 +1,6 @@
 return {
     "neovim/nvim-lspconfig",
-    event = "VeryLazy",
+    event = "InsertEnter",
     cmd = { "LspInfo", "LspInstall", "LspUninstall" },
     dependencies = {
         "williamboman/mason.nvim",
@@ -102,7 +102,6 @@ return {
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
         local sources = {
-            { name = "luasnip" }, -- For luasnip users.
             {
                 name = "nvim_lsp",
                 option = {
@@ -111,6 +110,7 @@ return {
                     }
                 }
             },
+            { name = "luasnip" }, -- For luasnip users.
             { name = "path" },
             { name = "copilot" },
             { name = "buffer" },

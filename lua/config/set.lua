@@ -35,7 +35,7 @@ vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
 
-vim.opt.cmdheight = 0 -- Set to 0 if using custom status line
+vim.opt.cmdheight = 1 -- Set to 0 if using custom status line
 
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"

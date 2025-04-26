@@ -1,5 +1,5 @@
 return {
-    'IogaMaster/neocord',
+    'mauriba/neocord',
     event = "VeryLazy",
     config = function()
         require("neocord").setup({
