@@ -23,3 +23,10 @@ that will help me get more efficient with coding in general
 its available commands
 - neovim comes with some amazing plugins I haven't seen before, e.g. fuzzy-finding
 or treesitter-based syntax highlighting
+
+## Open To Dos
+- [ ] configure conform
+    - [ ] enable conform for embedded languages
+    - [ ] make sure conform doesn't destroy default `gq` support
+    - [ ] make sure conform's foldexpr works
+- [ ] add dynamic indendation finally

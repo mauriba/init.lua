@@ -1,3 +1,9 @@
+-- TODO: Certain LSP installations require special programs
+-- like terraform, powershell_es etc.
+-- We should consider removing them to avoid constant
+-- errors on startup.
+--
+-- TODO: Better formatting (some smart auto-detect like in vscode)
 return {
     "neovim/nvim-lspconfig",
     event = "InsertEnter",
