@@ -9,7 +9,7 @@ return {
     },
     {
         "windwp/nvim-ts-autotag",
-        event = "InsertEnter",
+        ft = { "markdown", "text", "html", "xml" },
         config = function()
             require('nvim-ts-autotag').setup({
                 opts = {
