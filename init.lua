@@ -1,4 +1,5 @@
 require("config.set")
+require("config.remote")
 require("config.remap")
 require("config.lazy")
 require("config.filetypes")
