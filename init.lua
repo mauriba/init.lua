@@ -1,4 +1,5 @@
 require("config.set")
+require("config.osc52")
 require("config.remap")
 require("config.lazy")
 require("config.filetypes")
