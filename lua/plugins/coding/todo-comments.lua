@@ -1,12 +1,9 @@
--- TODO: Fix sign column having too many symbols
--- TODO: Fix lsp diagnostics running outside of the viewable screen
--- TODO: Somehow emphasize cursor visually (after searching with /, I can rarely find the cursor)
 return {
     "folke/todo-comments.nvim",
     event = "VeryLazy",
     keys = {
         { "<leader>tdt", "<cmd>TodoTelescope<cr>", desc = "Todo: Telescope" },
-        { "<leader>tdq", "<cmd>TodoQuickFix<cr>", desc = "Todo: Quickfix" },
+        { "<leader>tdq", "<cmd>TodoQuickFix<cr>",  desc = "Todo: Quickfix" },
     },
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {

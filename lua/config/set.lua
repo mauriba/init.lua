@@ -5,6 +5,7 @@ vim.opt.guicursor = ""
 
 vim.opt.nu = true
 vim.opt.relativenumber = false
+vim.opt.numberwidth = 2 -- minimal number of columns to use for line number
 
 function Indent(spaces)
     vim.opt.tabstop = spaces
@@ -38,13 +39,12 @@ vim.opt.termguicolors = true
 vim.opt.cmdheight = 1 -- Set to 0 if using custom status line
 
 vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
 vim.opt.cursorline = true
--- vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = "100"
 
 -- Code folding
 vim.o.foldcolumn = "1" -- '0' is not bad

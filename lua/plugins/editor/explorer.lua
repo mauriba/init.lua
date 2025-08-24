@@ -1,4 +1,4 @@
--- NOTE: You can use Oil over SSH: nvim oil-ssh://[username@]hostname[:port]/[path]
+-- You can use Oil over SSH: nvim oil-ssh://[username@]hostname[:port]/[path]
 return {
     'stevearc/oil.nvim',
     dependencies = { "echasnovski/mini.icons",
