@@ -18,7 +18,6 @@ return {
         "hrsh7th/nvim-cmp",
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
-        "j-hui/fidget.nvim",
         { "onsails/lspkind.nvim", config = function() require("lspkind").setup() end },
         "zbirenbaum/copilot-cmp",
     },
@@ -39,7 +38,6 @@ return {
         }
         capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-        require("fidget").setup({})
         require("mason").setup({})
         require("mason-lspconfig").setup({
             ensure_installed = {
