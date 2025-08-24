@@ -9,7 +9,7 @@ return {
     },
     {
         "windwp/nvim-ts-autotag",
-        ft = { "markdown", "text", "html", "xml" },
+        ft = { "markdown", "text", "html", "xml", "svg" },
         config = function()
             require('nvim-ts-autotag').setup({
                 opts = {

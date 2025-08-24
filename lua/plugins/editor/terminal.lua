@@ -1,3 +1,13 @@
+-- The common string in the terminal right before the commands are being typed in
+local prompt_end
+if vim.fn.has("win32") == 1 then
+    prompt_end = "> "
+elseif (vim.env.SHELL or ""):match("fish") then
+    prompt_end = "> "
+else
+    prompt_end = "%$ "
+end
+
 return {
     {
         'chomosuke/term-edit.nvim',
@@ -5,8 +15,7 @@ return {
         version = '1.*',
         config = function()
             require("term-edit").setup({
-                -- TODO: Depends on shell
-                prompt_end = '%$ ',
+                prompt_end = prompt_end
             })
         end
     },

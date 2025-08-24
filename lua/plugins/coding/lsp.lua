@@ -1,13 +1,5 @@
--- TODO: Certain LSP installations require special programs
--- like terraform, powershell_es etc.
--- We should consider removing them to avoid constant
--- errors on startup.
---
--- TODO: Better formatting (some smart auto-detect like in vscode)
 return {
     "neovim/nvim-lspconfig",
-    event = "InsertEnter",
-    cmd = { "LspInfo", "LspInstall", "LspUninstall" },
     dependencies = {
         "williamboman/mason.nvim",
         "williamboman/mason-lspconfig.nvim",
@@ -41,11 +33,8 @@ return {
         require("mason").setup({})
         require("mason-lspconfig").setup({
             ensure_installed = {
-                "lua_ls", "clangd", "powershell_es", "terraformls",
-                "texlab", "pyright", "markdown_oxide", "neocmake",
-                "jsonls", "yamlls", "ts_ls", "sqlls", "julials",
+                "lua_ls", "pyright", "markdown_oxide", "jsonls", "yamlls", "ts_ls"
             },
-            automatic_installation = true,
             handlers = {
                 function(server_name) -- default handler (optional)
                     require("lspconfig")[server_name].setup {
@@ -71,21 +60,6 @@ return {
                     })
                 end,
 
-                zls = function()
-                    local lspconfig = require("lspconfig")
-                    lspconfig.zls.setup({
-                        root_dir = lspconfig.util.root_pattern(".git", "build.zig", "zls.json"),
-                        settings = {
-                            zls = {
-                                enable_inlay_hints = true,
-                                enable_snippets = true,
-                                warn_style = true,
-                            },
-                        },
-                    })
-                    vim.g.zig_fmt_parse_errors = 0
-                    vim.g.zig_fmt_autosave = 0
-                end,
                 lua_ls = function()
                     local lspconfig = require("lspconfig")
                     lspconfig.lua_ls.setup {
@@ -142,6 +116,7 @@ return {
             },
         })
 
+        -- Dadbod completion for DB plugin
         cmp.setup.filetype({ "sql", "mysql", "plsql" }, {
             sources = vim.list_extend(sources, {
                 { name = "vim-dadbod-completion" },
@@ -186,7 +161,5 @@ return {
                     { buffer = e.buf, desc = "Previous Diagnostic" })
             end
         })
-
-        vim.cmd("LspStart")
     end,
 }
