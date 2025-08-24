@@ -1,7 +1,6 @@
 # NOTE: Example cloned from https://cliutils.gitlab.io/modern-cmake/chapters/basics/example.html
 # Does not actually work (due to missing source files)
 
-
 # Almost all CMake files should start with this You should always specify a
 # range with the newest and oldest tested versions of CMake. This will ensure
 # you pick up the best policies.

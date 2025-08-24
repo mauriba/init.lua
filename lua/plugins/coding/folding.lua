@@ -1,3 +1,4 @@
+-- TODO: Test if we can get rid of UFO
 return {
     "kevinhwang91/nvim-ufo",
     dependencies = {

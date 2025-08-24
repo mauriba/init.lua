@@ -39,3 +39,10 @@ end)
 vim.api.nvim_create_user_command("Q", ":q", {})
 -- Let W also write file
 vim.api.nvim_create_user_command("W", ":w", {})
+
+-- QuickFix navigation
+vim.keymap.set('n', '<leader>qj', '<Cmd>try | cnext | catch | cfirst | catch | endtry<CR>', { desc = "Next QuickFix Item" })
+vim.keymap.set('n', '<leader>qk', '<Cmd>try | cprevious | catch | clast | catch | endtry<CR>',
+    { desc = "Previous QuickFix Item" })
+vim.keymap.set('n', '<leader>qh', '<Cmd>try | colder | catch | endtry<CR>', { desc = "Previous QuickFix List" })
+vim.keymap.set('n', '<leader>ql', '<Cmd>try | cnewer | catch | endtry<CR>', { desc = "Next QuickFix list" })
