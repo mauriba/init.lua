@@ -1,3 +1,4 @@
+-- TODO: Better autocomplete
 return {
     "zbirenbaum/copilot.lua",
     cmd = { "Copilot" },

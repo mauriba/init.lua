@@ -33,7 +33,17 @@ function MakeTransparent()
     vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
+
 vim.keymap.set("n", "<leader>tb", MakeTransparent, { desc = "Make background transparent" })
+
+-- Custom highlight group overrides
+vim.api.nvim_create_augroup("mauribaColors", { clear = true })
+vim.api.nvim_create_autocmd("ColorScheme", {
+    group = "mauribaColors",
+    callback = function()
+        vim.api.nvim_set_hl(0, "QuickFixLine", { link = "Search" })
+    end
+})
 
 -- List of colorschemes
 local colorschemes = {

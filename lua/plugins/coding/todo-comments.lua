@@ -1,3 +1,6 @@
+-- TODO: Fix sign column having too many symbols
+-- TODO: Fix lsp diagnostics running outside of the viewable screen
+-- TODO: Somehow emphasize cursor visually (after searching with /, I can rarely find the cursor)
 return {
     "folke/todo-comments.nvim",
     event = "VeryLazy",
