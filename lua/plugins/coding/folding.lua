@@ -1,4 +1,3 @@
--- TODO: Test if we can get rid of UFO
 return {
     "kevinhwang91/nvim-ufo",
     dependencies = {
@@ -20,7 +19,7 @@ return {
         },
     },
     config = function()
-        -- thanks to https://www.reddit.com/r/neovim/comments/1e7rteu/create_textobject_az_and_iz_for_currentfoldscope/ 
+        -- thanks to https://www.reddit.com/r/neovim/comments/1e7rteu/create_textobject_az_and_iz_for_currentfoldscope/
         -- see https://github.com/kevinhwang91/nvim-ufo/blob/1b5f2838099f283857729e820cc05e2b19df7a2c/lua/ufo/main.lua#L134
         local getFoldScope = function()
             local bufnr = vim.api.nvim_get_current_buf()

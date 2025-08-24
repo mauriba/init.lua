@@ -13,21 +13,50 @@ return {
     },
     config = function()
         local builtin = require("statuscol.builtin")
+
+        function DiagnosticOrDapClickHandler(minwid, clicks, button, mods)
+            local lnum = vim.fn.getmousepos().line
+            local bufnr = vim.api.nvim_get_current_buf()
+
+            local diags = vim.diagnostic.get(bufnr, { lnum = lnum - 1 })
+            if #diags > 0 then
+                -- Show diagnostics float (scheduled to avoid instant
+                -- close due to internal mouse movement)
+                vim.schedule(function()
+                    vim.diagnostic.open_float(bufnr, {
+                        lnum = lnum - 1,
+                        scope = "line",
+                    })
+                end)
+            else
+                require("dap").toggle_breakpoint()
+            end
+        end
+
         require("statuscol").setup({
             relculright = true,
             ft_ignore = { "oil", },
             segments = {
                 {
-                    sign = { namespace = { "gitsigns" }, name = { ".*" }, maxwidth = 1, colwidth = 2, auto = false },
-                    click = "v:lua.ScSa",
+                    sign = { name = { ".*" }, text = { ".*" } },
+                    maxwidth = 2,
+                    colwidth = 1,
+                    wrap = false,
+                    auto = true,
+                    click = "v:lua.DiagnosticOrDapClickHandler",
                 },
                 {
-                    sign = { name = { ".*" }, maxwidth = 2, colwidth = 1, auto = true, wrap = true },
-                    click = "v:lua.ScSa"
+                    text = { builtin.lnumfunc },
+                    auto = true,
+                    click = "v:lua.ScLa",
                 },
-                { text = { builtin.lnumfunc },      click = "v:lua.ScLa", },
+                {
+                    sign = { namespace = { "gitsigns" }, maxwidth = 1, colwidth = 1, auto = false },
+                    auto = true,
+                    click = "v:lua.ScSa",
+                },
                 { text = { builtin.foldfunc, " " }, click = "v:lua.ScFa" },
-            }
+            },
         })
     end,
 }

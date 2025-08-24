@@ -116,6 +116,9 @@ return {
             },
         })
 
+        -- Special color for copilot autocomplete
+        vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
+
         -- Dadbod completion for DB plugin
         cmp.setup.filetype({ "sql", "mysql", "plsql" }, {
             sources = vim.list_extend(sources, {
@@ -123,9 +126,19 @@ return {
             }),
         })
 
-        vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
+        -- Diagnostic settings
+        local signs = {
+            Error = "",
+            Warn  = "",
+            Hint  = "",
+            Info  = "",
+        }
+        for type, icon in pairs(signs) do
+            local hl = "DiagnosticSign" .. type
+            vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+        end
         vim.diagnostic.config({
-            virtual_text = true,
+            virtual_text = false,
             update_in_insert = true,
             float = {
                 focusable = false,
@@ -155,9 +168,9 @@ return {
                 vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, { buffer = e.buf, desc = "LSP Hover" })
                 vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end,
                     { buffer = e.buf, desc = "Open Diagnostics" })
-                vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end,
+                vim.keymap.set("n", "]d", function() vim.diagnostic.goto_next() end,
                     { buffer = e.buf, desc = "Next Diagnostic" })
-                vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end,
+                vim.keymap.set("n", "[d", function() vim.diagnostic.goto_prev() end,
                     { buffer = e.buf, desc = "Previous Diagnostic" })
             end
         })
