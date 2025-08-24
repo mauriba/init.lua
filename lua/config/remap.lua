@@ -18,9 +18,6 @@ vim.api.nvim_set_keymap('v', "<C-K>", ":m '<-2<CR>gv=gv", { noremap = true, sile
 vim.api.nvim_set_keymap('v', "<C-H>", "<gv", { noremap = true, silent = true, desc = "Move line left" })
 vim.api.nvim_set_keymap('v', "<C-L>", ">gv", { noremap = true, silent = true, desc = "Move line right" })
 
-vim.keymap.set("n", "<leader>gq", function()
-    vim.lsp.buf.format({ timeout_ms = 6000 })
-end, { desc = "Format whole document" })
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
 -- Change current directory to the current buffer's path
