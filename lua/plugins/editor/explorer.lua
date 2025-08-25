@@ -246,5 +246,16 @@ return {
                 [StatusType.External]    = "DiagnosticWarn",
             }
         })
+
+        -- Open oil instead of dashboard on `nvim` if there is no session
+        if vim.fn.argc() == 0 then
+            local cwd = vim.fn.getcwd()
+            local session_dir = vim.fn.stdpath("data") .. "/sessions"
+            local session_file = session_dir .. "/" .. cwd:gsub("[/\\]", "%%") .. ".vim"
+
+            if vim.fn.filereadable(session_file) == 0 then
+                require("oil").open()
+            end
+        end
     end
 }
