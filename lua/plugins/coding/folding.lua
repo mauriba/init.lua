@@ -19,6 +19,37 @@ return {
         },
     },
     config = function()
+        local get_qf_folds = function(bufnr)
+            bufnr = bufnr or vim.api.nvim_get_current_buf()
+            local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+            local folds = {}
+
+            local last_file = nil
+            local start = nil
+
+            for i, line in ipairs(lines) do
+                -- Grab filename: everything before first '|' or first ':'
+                local filename = line:match("^(.-)[|:]")
+                if filename then
+                    if filename ~= last_file then
+                        -- close previous fold
+                        if last_file and start then
+                            table.insert(folds, { startLine = start - 1, endLine = i - 2 }) -- 0-indexed
+                        end
+                        start = i
+                        last_file = filename
+                    end
+                end
+            end
+
+            -- close last fold
+            if last_file and start then
+                table.insert(folds, { startLine = start - 1, endLine = #lines - 1 })
+            end
+
+            return folds
+        end
+
         -- thanks to https://www.reddit.com/r/neovim/comments/1e7rteu/create_textobject_az_and_iz_for_currentfoldscope/
         -- see https://github.com/kevinhwang91/nvim-ufo/blob/1b5f2838099f283857729e820cc05e2b19df7a2c/lua/ufo/main.lua#L134
         local getFoldScope = function()
@@ -71,7 +102,11 @@ return {
 
         ufo.setup({
             provider_selector = function(bufnr, filetype, buftype)
-                return { "treesitter", "indent" }
+                if (filetype == "qf") then
+                    return get_qf_folds
+                else
+                    return { "treesitter", "indent" }
+                end
             end,
         })
     end,
