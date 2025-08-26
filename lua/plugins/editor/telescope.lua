@@ -11,25 +11,38 @@ return {
             },
         },
         keys = {
-            { "<leader>pb", "<cmd>Telescope buffers<cr>", desc = "Telescope: Project Buffers" },
-            { "<leader>pf", "<cmd>Telescope find_files<cr>", desc = "Telescope: Project Files" },
+            { "<leader>pb", "<cmd>Telescope buffers<cr>",      desc = "Telescope: Project Buffers" },
+            { "<leader>pf", "<cmd>Telescope find_files<cr>",   desc = "Telescope: Project Files" },
             { "<leader>pg", "<cmd>Telescope git_bcommits<cr>", desc = "Telescope: Project Git Commits (buffer)" },
-            { "<leader>pG", "<cmd>Telescope git_commits<cr>", desc = "Telescope: Project Git Commits (project)" },
-            { "<leader>pn", "<cmd>Telescope notify<cr>", desc = "Telescope: Project Notifications" },
-            { "<leader>pc", "<cmd>Telescope colorscheme<cr>", desc = "Telescope: Project Color Themes" },
-            { "<leader>ph", "<cmd>Telescope help_tags<cr>", desc = "Telescope: Help Tags" },
-            { "<leader>pk", "<cmd>Telescope keymaps<cr>", desc = "Telescope: Key Maps" },
-            { "<leader>ps", function ()
-                require("telescope.builtin").grep_string({ search = vim.fn.input("Grep > ") })
-            end, desc = "Telescope: Project Search (Grep)" },
-            { "<leader>pws", function ()
-                local word = vim.fn.expand("<cword>")
-                require("telescope.builtin").grep_string({ search = word })
-            end, desc = "Telescope: Project Search under cursor" },
-            { "<leader>pWs", function ()
-                local word = vim.fn.expand("<cWORD>")
-                require("telescope.builtin").grep_string({ search = word })
-            end, desc = "Telescope: Project Search around cursor" },
+            { "<leader>pG", "<cmd>Telescope git_commits<cr>",  desc = "Telescope: Project Git Commits (project)" },
+            { "<leader>pn", "<cmd>Telescope notify<cr>",       desc = "Telescope: Project Notifications" },
+            { "<leader>pc", "<cmd>Telescope colorscheme<cr>",  desc = "Telescope: Project Color Themes" },
+            { "<leader>ph", "<cmd>Telescope help_tags<cr>",    desc = "Telescope: Help Tags" },
+            { "<leader>pk", "<cmd>Telescope keymaps<cr>",      desc = "Telescope: Key Maps" },
+            {
+                "<leader>ps",
+                function()
+                    require("config.multigrep").multigrep()
+                    -- require("telescope.builtin").grep_string({ search = vim.fn.input("Grep > ") })
+                end,
+                desc = "Telescope: Project Search (Grep)"
+            },
+            {
+                "<leader>pws",
+                function()
+                    local word = vim.fn.expand("<cword>")
+                    require("telescope.builtin").grep_string({ search = word })
+                end,
+                desc = "Telescope: Project Search under cursor"
+            },
+            {
+                "<leader>pWs",
+                function()
+                    local word = vim.fn.expand("<cWORD>")
+                    require("telescope.builtin").grep_string({ search = word })
+                end,
+                desc = "Telescope: Project Search around cursor"
+            },
         },
 
         config = function()
@@ -37,10 +50,10 @@ return {
             require('telescope').setup {
                 extensions = {
                     fzf = {
-                        fuzzy = true,                    -- false will only do exact matching
-                        override_generic_sorter = true,  -- override the generic sorter
-                        override_file_sorter = true,     -- override the file sorter
-                        case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                        fuzzy = true,                   -- false will only do exact matching
+                        override_generic_sorter = true, -- override the generic sorter
+                        override_file_sorter = true,    -- override the file sorter
+                        case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
                     },
                 },
                 pickers = {
