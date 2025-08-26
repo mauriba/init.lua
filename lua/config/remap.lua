@@ -50,3 +50,8 @@ vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
 vim.keymap.set('n', '<C-f>', '<C-f>zz')
 vim.keymap.set('n', '<C-b>', '<C-b>zz')
+
+-- Quick diffing
+-- Remember: ]c / [c for next/previous conflict
+vim.keymap.set('n', '<c', "<cmd>diffget<CR>", { desc = "Get diff from other buffer" })
+vim.keymap.set('n', '>c', "<cmd>diffput<CR>", { desc = "Put diff into other buffer" })
