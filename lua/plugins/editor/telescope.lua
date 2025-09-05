@@ -11,14 +11,24 @@ return {
             },
         },
         keys = {
-            { "<leader>pb", "<cmd>Telescope buffers<cr>",      desc = "Telescope: Project Buffers" },
-            { "<leader>pf", "<cmd>Telescope find_files<cr>",   desc = "Telescope: Project Files" },
-            { "<leader>pg", "<cmd>Telescope git_bcommits<cr>", desc = "Telescope: Project Git Commits (buffer)" },
-            { "<leader>pG", "<cmd>Telescope git_commits<cr>",  desc = "Telescope: Project Git Commits (project)" },
-            { "<leader>pn", "<cmd>Telescope notify<cr>",       desc = "Telescope: Project Notifications" },
-            { "<leader>pc", "<cmd>Telescope colorscheme<cr>",  desc = "Telescope: Project Color Themes" },
-            { "<leader>ph", "<cmd>Telescope help_tags<cr>",    desc = "Telescope: Help Tags" },
-            { "<leader>pk", "<cmd>Telescope keymaps<cr>",      desc = "Telescope: Key Maps" },
+            { "<leader>pb",  "<cmd>Telescope buffers<cr>",      desc = "Telescope: Project Buffers" },
+            { "<leader>pf",  "<cmd>Telescope find_files<cr>",   desc = "Telescope: Project Files" },
+            { "<leader>pgb", "<cmd>Telescope git_branches<cr>", desc = "Telescope: Project Git Branches" },
+            {
+                "<leader>pgc",
+                function()
+                    if vim.bo.filetype == "oil" then
+                        require("telescope.builtin").git_commits();
+                    else
+                        require("telescope.builtin").git_bcommits();
+                    end
+                end,
+                desc = "Telescope: Project Git Commits"
+            },
+            { "<leader>pn", "<cmd>Telescope notify<cr>",      desc = "Telescope: Project Notifications" },
+            { "<leader>pc", "<cmd>Telescope colorscheme<cr>", desc = "Telescope: Project Color Themes" },
+            { "<leader>ph", "<cmd>Telescope help_tags<cr>",   desc = "Telescope: Help Tags" },
+            { "<leader>pk", "<cmd>Telescope keymaps<cr>",     desc = "Telescope: Key Maps" },
             {
                 "<leader>ps",
                 function()
