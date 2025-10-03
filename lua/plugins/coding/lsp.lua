@@ -35,6 +35,12 @@ return {
 		}
 		capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+		-- LSPs outside of mason go here
+		if vim.fn.executable("sourcekit-lsp") == 1 then
+			vim.lsp.enable("sourcekit")
+		end
+
+		-- LSPs installed via mason get automatically configured
 		require("mason").setup({})
 		require("mason-lspconfig").setup({
 			ensure_installed = {
