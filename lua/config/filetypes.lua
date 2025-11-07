@@ -6,10 +6,14 @@ vim.filetype.add({
 })
 
 vim.api.nvim_create_autocmd("Filetype", {
-    callback = function ()
+    callback = function()
         if (vim.bo.filetype == "terraform") then
             vim.bo.commentstring = "# %s"
             Indent(2)
+        end
+        if (vim.bo.filetype == "cisco") then
+            vim.bo.commentstring = "! %s"
+            Indent(4)
         end
     end
 })
