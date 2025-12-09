@@ -1,5 +1,5 @@
 function string:ends_with(suffix)
-	return self:sub(-#suffix) == suffix
+	return self:sub(- #suffix) == suffix
 end
 
 function string:starts_with(prefix)
@@ -21,8 +21,12 @@ vim.api.nvim_set_keymap("v", "<C-L>", ">gv", { noremap = true, silent = true, de
 vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], { desc = "Exit terminal mode" })
 
 -- Change current directory to the current buffer's path
-vim.keymap.set("n", "<leader>cd", function()
+function SetCWD()
 	local p = vim.fn.expand("%:p")
+	if p == nil or p == "" then
+		return
+	end
+
 	if p:starts_with("oil:///") then
 		p = require("oil").get_current_dir()
 	elseif not p:ends_with("/") then
@@ -30,7 +34,12 @@ vim.keymap.set("n", "<leader>cd", function()
 	end
 	vim.cmd("cd " .. p)
 	print("New CWD: " .. p)
-end)
+end
+
+-- Automatically set cwd on startup
+SetCWD()
+
+vim.keymap.set("n", "<leader>cd", SetCWD)
 
 -- Let Q also quit neovim
 vim.api.nvim_create_user_command("Q", ":q", {})

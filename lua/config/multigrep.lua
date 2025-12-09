@@ -5,8 +5,6 @@ local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
-local history_file = vim.fn.stdpath("data") .. "/multigrep_history.txt"
-
 local M = {}
 M.separator = "  "
 M.history = {}
@@ -88,8 +86,13 @@ function M:multigrep(opts)
 
     picker:find()
 
-    -- Pre-fill last prompt when opening again
-    if M._last_prompt then
+    -- Pre-fill prompts
+    if opts.searh ~= null then
+        vim.schedule(function()
+            local prompt_bufnr = vim.api.nvim_get_current_buf()
+            vim.api.nvim_buf_set_text(prompt_bufnr, 0, 0, 0, 0, { opts.search })
+        end)
+    elseif M._last_prompt then
         vim.schedule(function()
             local prompt_bufnr = vim.api.nvim_get_current_buf()
             vim.api.nvim_buf_set_text(prompt_bufnr, 0, 0, 0, 0, { M._last_prompt })

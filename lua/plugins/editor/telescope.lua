@@ -37,6 +37,7 @@ return {
                     require("config.multigrep").multigrep()
                     -- require("telescope.builtin").grep_string({ search = vim.fn.input("Grep > ") })
                 end,
+                mode = "n",
                 desc = "Telescope: Project Search (Grep)"
             },
             {
@@ -45,6 +46,7 @@ return {
                     local word = vim.fn.expand("<cword>")
                     require("telescope.builtin").grep_string({ search = word })
                 end,
+                mode = "n",
                 desc = "Telescope: Project Search under cursor"
             },
             {
