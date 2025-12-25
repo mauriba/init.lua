@@ -1,6 +1,7 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = "main",
         dependencies = {
             "nvim-treesitter",
         },
@@ -9,8 +10,8 @@ return {
             { "<leader>a", nil, desc = "Swap with next parameter" },
             { "<leader>A", nil, desc = "Swap with previous parameter" }
         },
-        config = function ()
-            local treesitter = require("nvim-treesitter.configs")
+        config = function()
+            local treesitter = require("nvim-treesitter.config")
             treesitter.setup {
                 textobjects = {
                     select = {
@@ -44,8 +45,8 @@ return {
     {
         "echasnovski/mini.surround",
         version = false,
-        config = function ()
-            require('mini.surround').setup{
+        config = function()
+            require('mini.surround').setup {
                 highlight_duration = 500,
                 mappings = {
                     add = 'sa',
