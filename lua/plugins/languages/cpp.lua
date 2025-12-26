@@ -1,6 +1,7 @@
 return {
 	{
 		"Badhi/nvim-treesitter-cpp-tools",
+		branch = "main",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		ft = { "cpp" },
 		cmd = {
