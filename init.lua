@@ -1,6 +1,1 @@
-require("config.set")
-require("config.osc52")
-require("config.remap")
-require("config.motions")
-require("config.lazy")
-require("config.filetypes")
+print("Hello nvim 0.12")
