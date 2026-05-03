@@ -21,7 +21,7 @@ vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
 
-vim.opt.cmdheight = 1 -- Set to 0 if using custom status line
+vim.opt.cmdheight = 0 -- Set to 0 if using custom status line
 
 vim.opt.scrolloff = 8
 vim.opt.isfname:append("@-@")
@@ -31,15 +31,15 @@ vim.opt.updatetime = 50
 vim.opt.cursorline = true
 vim.opt.colorcolumn = "100"
 
+-- Default indentation
+vim.opt.expandtab = true
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
+
 -- Code folding
 vim.o.foldcolumn = "1" -- '0' is not bad
-vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldenable = true
 vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 vim.opt.signcolumn = "yes"
-
--- Disable the freaking annoying Unneccessary->Comment link
--- that causes unused functions to be rendered like comments
-vim.api.nvim_set_hl(0, "@lsp.type.unused", {})
-vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", {})
-vim.api.nvim_set_hl(0, "LspDiagnosticsUnused", {})

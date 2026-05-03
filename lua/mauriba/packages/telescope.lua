@@ -8,7 +8,6 @@ end
 vim.api.nvim_create_autocmd('PackChanged', { callback = hooks })
 
 vim.pack.add({
-    'https://github.com/nvim-lua/plenary.nvim',
     'https://github.com/nvim-telescope/telescope.nvim',
     'https://github.com/nvim-telescope/telescope-fzf-native.nvim'
 })
@@ -59,7 +58,7 @@ map("n", "<leader>ph", tb.help_tags, { desc = "Telescope: Help Tags" })
 map("n", "<leader>pk", tb.keymaps, { desc = "Telescope: Key Maps" })
 
 map("n", "<leader>ps", function()
-    
+    tb.grep_string({ search = vim.fn.input("Grep > ") })
 end, { desc = "Telescope: Project Search (Grep)" })
 
 map("n", "<leader>pws", function()
