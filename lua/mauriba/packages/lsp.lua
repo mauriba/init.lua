@@ -140,6 +140,7 @@ require("mason-lspconfig").setup({
 		"lua_ls",
 		"jsonls",
 		"yamlls",
+		"texlab",
 	},
 })
 
@@ -189,6 +190,7 @@ require("conform").setup({
 		cpp = { "clang-format" },
 		c = { "clang-format" },
 		json = { "fixjson", "jq", stop_after_first = true }, -- For manual indentation, use ":%!jq --indent 2 ."
+		tex = { "latexindent" },
 	},
 	-- Set default options
 	default_format_opts = {
