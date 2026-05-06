@@ -1,6 +1,6 @@
-require("config.set")
-require("config.osc52")
-require("config.remap")
-require("config.motions")
-require("config.lazy")
-require("config.filetypes")
+require("vim._core.ui2").enable({
+	enable = true,
+})
+
+require("mauriba.config")
+require("mauriba.packages")

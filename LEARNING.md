@@ -16,6 +16,10 @@ simply refreshing what I have learned.
 - `]c` jump to next diff
 - `[d` jump to previous diff
 
+## Navigation
+- `*` go to next same word (like the one under cursor)
+- `#` go to previous same word (like the one under cursor)
+
 # Commands
 
 - `vnew` opens an empty buffer on the left
