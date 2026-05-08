@@ -29,7 +29,7 @@ require("oil").setup({
 		autosave_changes = false,
 	},
 	view_options = {
-		show_hidden = false,
+		show_hidden = true,
 	},
 	watch_for_changes = true,
 })
