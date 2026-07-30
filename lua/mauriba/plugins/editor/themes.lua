@@ -33,10 +33,11 @@ function MakeTransparent()
     vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
+
 vim.keymap.set("n", "<leader>tb", MakeTransparent, { desc = "Make background transparent" })
 
 -- List of colorschemes
-local colorschemes = {
+return {
     {
         "catppuccin/nvim",
         name = "catppuccin",
@@ -49,7 +50,6 @@ local colorschemes = {
                 transparent_background = false,
                 default_integrations = true,
                 integrations = {
-                    cmp = true,
                     gitsigns = true,
                     nvimtree = true,
                     treesitter = true,
@@ -78,23 +78,16 @@ local colorschemes = {
         "folke/tokyonight.nvim",
         name = "tokyonight",
         opts = { style = "moon" },
+    },
+    {
+        "rebelot/kanagawa.nvim",
+    },
+    { "EdenEast/nightfox.nvim" },
+    {
+        'raddari/last-color.nvim',
+        config = function()
+            local theme = require('last-color').recall() or 'rose-pine'
+            vim.cmd.colorscheme(theme)
+        end
     }
 }
-
--- Lazy load all themes but the default one
-local default_theme = "rose-pine-moon"
-for key, value in pairs(colorschemes) do
-    if default_theme:sub(1, #value.name) == value.name then
-        colorschemes[key].lazy = false
-        colorschemes[key].priority = 1000
-        local schemeConfig = colorschemes[key].config
-        colorschemes[key].config = function()
-            schemeConfig()
-            vim.cmd.colorscheme(default_theme)
-        end
-    else
-        colorschemes[key].lazy = "true"
-    end
-end
-
-return colorschemes
